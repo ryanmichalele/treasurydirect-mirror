@@ -1,0 +1,727 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1">
+    <title>How Auctions Work — TreasuryDirect</title>
+    <link rel="stylesheet" type="text/css" href="/styles/style.css">
+    <link rel="icon" href="/images/favicon.svg" type="image/svg+xml">
+    
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    
+    
+    <style>
+      .scrollButton:hover{
+        background-color: #0379ca;
+        opacity: 100% !important;
+      }
+    </style>
+    
+  </head>
+  <body>
+
+    
+
+    <div class="container">
+      <a class="sr-only sr-only-focusable" href="#main">Skip Navigation</a>
+    </div>
+
+    
+
+    
+  
+<div class="text-white bg-usa-blue-dark" role="banner">
+
+  <div class="container-xxl">
+    <div class="row">
+    
+      <div class="col-md py-1 media small">
+        <img class="align-self-center mr-2" src="/images/icons/us_flag_small.png" alt="U.S. flag">
+        <div class="media-body">
+          <span class="mr-2">An official website of the United States government</span>
+          <a class="d-block d-md-inline-block text-td-blue-light arrow-collapse" role="button" href="#" data-toggle="collapse" data-target="#official-site-collapse" aria-expanded="false" aria-controls="official-site-collapse">
+            Here’s how you know
+            <svg class="bi-chevron-down" width="1.1em" height="1.1em" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M143 352.3L7 216.3c-9.4-9.4-9.4-24.6 0-33.9l22.6-22.6c9.4-9.4 24.6-9.4 33.9 0l96.4 96.4 96.4-96.4c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9l-136 136c-9.2 9.4-24.4 9.4-33.8 0z"/></svg>
+          </a>
+        </div>
+      </div>
+      
+      <div class="col-md py-1 border-top border-md-0 border-usa-gray-light small text-md-right">
+        <a class="text-white" href="https://www.treasury.gov" target="_blank" rel="nofollow noopener noreferrer">U.S. Department of the Treasury</a>
+      </div>
+      
+    </div>
+  </div>
+  
+  <div id="official-site-collapse" class="collapse container-xxl border-top border-md-0 border-usa-gray-light">
+    <div class="row">
+    
+      <div class="p-3 col-md-6">
+        <div class="media">
+          <img class="w-2-5em h-2-5em mr-2" src="/images/icons/icon-dot-gov.svg" alt="">
+          <div class="media-body">
+            <strong>Official websites use .gov</strong><br>
+            A <strong>.gov</strong> website belongs to an official government organization in the United States.
+          </div>
+        </div>
+      </div>
+      
+      <div class="p-3 col-md-6">
+        <div class="media">
+          <img class="w-2-5em h-2-5em mr-2" src="/images/icons/icon-https.svg" alt="">
+          <div class="media-body">
+            <strong>Secure .gov websites use HTTPS</strong><br>
+            A <strong>lock</strong> (<span class="icon-lock-white"></span>) or <strong>https://</strong> means you’ve safely connected to the .gov website. Share sensitive information only on official, secure websites.
+          </div>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+  
+</div>
+
+  
+<header id="header-site" class="bg-white">
+
+  <div class="container-xxl">
+    <nav class="navbar navbar-expand-lg navbar-td p-0">
+      <a class="navbar-brand d-lg-none py-3" href="/"><img src="/images/logo-treasurydirect-color.svg" alt="TreasuryDirect Home"></a>
+
+      <button class="navbar-toggler btn btn-outline-td-blue nav-text-small shadow-none" data-toggle="collapse" data-target="#site-nav-collapse" aria-controls="site-nav-collapse" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="align-middle">Menu</span></button>
+
+      <div class="collapse navbar-collapse flex-wrap navbars" id="site-nav-collapse">
+
+        <a class="navbar-brand d-none d-lg-block py-lg-4 order-lg-0" href="/"><img src="/images/logo-treasurydirect-color.svg" alt="TreasuryDirect Home"></a>
+
+        <div class="navbar-nav ml-lg-auto align-items-center order-lg-2">
+          <a class="btn btn-sm btn-td-orange text-white shadow-none" href="/log-in/">Log In</a>
+
+          <form id="search-form-page-header" action="https://search.usa.gov/search" accept-charset="UTF-8" method="get" class="ml-lg-3 my-0 py-2">
+            <div class="input-group input-group-sm">
+              <input type="text" name="query" id="query-page-header" autocomplete="off" class="form-control" placeholder="Search…" aria-label="Search TreasuryDirect" aria-describedby="button-site-search-header-submit">
+              <input name="utf8" type="hidden" value="&#x2713;" aria-label="Search">
+              <input type="hidden" name="affiliate" id="affiliate" value="treasurydirect" aria-label="Search">
+              <div class="input-group-append">
+                <button class="btn btn-td-green font-weight-bold shadow-none" type="submit" id="button-site-search-header-submit" name="commit" data-disable-with="Search" aria-label="Submit">
+                  <span class="icon-search-solid-white"></span>
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <ul class="navbar-nav nav-text-large order-lg-3 pb-lg-2">
+          <li class="nav-item"><a class="nav-link" href="/"><span class="icon-home-solid-blue"></span></a></li>
+
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="site-nav-savings-bond-link" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Savings Bonds</a>
+
+            <div class="dropdown-menu" aria-labelledby="site-nav-savings-bond-link">
+              <div class="dropdown-menu-wrapper">
+                <a class="dropdown-item" href="/savings-bonds/">About U.S. Savings Bonds</a>
+                <a class="dropdown-item" href="/savings-bonds/buy-a-bond/">Buy a Bond</a>
+                <a class="dropdown-item" href="/savings-bonds/gift-a-bond/">Gift a Savings Bond</a>
+                <a class="dropdown-item" href="/savings-bonds/cashing-a-bond/">Cash In a Bond</a>
+                <a class="dropdown-item" href="/savings-bonds/savings-bond-calculator/">Savings Bond Value Calculator</a>
+                <a class="dropdown-item" href="/savings-bonds/manage-bonds/">Manage Bonds</a>
+                <a class="dropdown-item" href="/savings-bonds/forms/">Forms for Savings Bonds</a>
+                <a class="dropdown-item" href="/savings-bonds/treasury-hunt/">Treasury Hunt</a>
+              </div>
+            </div>
+          </li>
+
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="site-nav-us-marketable-securities-link" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Treasury Marketable Securities</a>
+
+            <div class="dropdown-menu" aria-labelledby="site-nav-us-marketable-securities-link">
+              <div class="dropdown-menu-wrapper">
+                <a class="dropdown-item" href="/marketable-securities/">About Treasury Marketable Securities</a>
+                <a class="dropdown-item" href="/marketable-securities/treasury-bills/">Treasury Bills</a>
+                <a class="dropdown-item" href="/marketable-securities/treasury-bonds/">Treasury Bonds</a>
+                <a class="dropdown-item" href="/marketable-securities/treasury-notes/">Treasury Notes</a>
+                <a class="dropdown-item" href="/marketable-securities/tips/">TIPS</a>
+                <a class="dropdown-item" href="/marketable-securities/floating-rate-notes/">Floating Rate Notes (FRNs)</a>
+                <a class="dropdown-item" href="/marketable-securities/strips/">STRIPS</a>
+                <a class="dropdown-item" href="/marketable-securities/forms/">Forms for Treasury Marketable Securities</a>
+                <a class="dropdown-item" href="/savings-bonds/treasury-hunt/">Treasury Hunt</a>
+              </div>
+            </div>
+          </li>
+
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="site-nav-auctions-link" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Auctions</a>
+
+            <div class="dropdown-menu" aria-labelledby="site-nav-auctions-link">
+              <div class="dropdown-menu-wrapper">
+                <a class="dropdown-item" href="/auctions/">About Auctions</a>
+                <a class="dropdown-item" href="/auctions/how-auctions-work/">How Auctions Work (Participating)</a>
+                <a class="dropdown-item" href="/auctions/when-auctions-happen/">When Auctions Happen (Schedules)</a>
+                <a class="dropdown-item" href="/auctions/reopenings/">Reopenings</a>
+                <a class="dropdown-item" href="/auctions/announcements-data-results/">Announcements, Data & Results</a>
+                <a class="dropdown-item" href="/auctions/announcements-data-results/buy-backs/">Buyback Announcements and Results</a>
+                <a class="dropdown-item" href="/auctions/upcoming/">Upcoming Auctions</a>
+                <a class="dropdown-item" href="/auctions/results/">Recent Auction Results</a>
+                <a class="dropdown-item" href="/auctions/auction-query/">Auction Search (Query)</a>
+                <a class="dropdown-item" href="/auctions/announcements-data-results/announcement-results-press-releases/treasury-marketable/">Auction Press Releases</a>
+                <a class="dropdown-item" href="/laws-and-regulations/auction-regulations-uoc/">Auction Regulations (UOC)</a>
+              </div>
+            </div>
+          </li>
+
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="site-nav-laws-link" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Laws and Regulations</a>
+
+            <div class="dropdown-menu" aria-labelledby="site-nav-laws-link">
+              <div class="dropdown-menu-wrapper">
+                <a class="dropdown-item" href="/laws-and-regulations/">About Laws and Regulations</a>
+                <a class="dropdown-item" href="/laws-and-regulations/auction-regulations-uoc/">Auction Regulations (UOC)</a>
+                <a class="dropdown-item" href="/laws-and-regulations/collateral-programs/">Collateral Programs</a>
+                <a class="dropdown-item" href="/laws-and-regulations/trades/">Commercial Book-Entry Regulations (TRADES)</a>
+                <a class="dropdown-item" href="/laws-and-regulations/fraud/">Frauds, Phonies, & Scams</a>
+                <a class="dropdown-item" href="/laws-and-regulations/gsa/">Government Securities Act (GSA) Regulations</a>
+                <a class="dropdown-item" href="/laws-and-regulations/gsa/lpr-reports/">Large Position Reporting (LPR)</a>
+                <a class="dropdown-item" href="/laws-and-regulations/buyback-rules/">Redemption (Buyback) Operations Regulations</a>
+                <a class="dropdown-item" href="/laws-and-regulations/marketable-securities-laws-and-regulations/">Treasury Marketable Securities Regulations</a>
+                <a class="dropdown-item" href="/laws-and-regulations/savings-bond-regulations/">Savings Bond Regulations</a>
+                <a class="dropdown-item" href="/laws-and-regulations/treasury-direct-regulations/">TreasuryDirect Regulations</a>
+              </div>
+            </div>
+          </li>
+
+          <li class="nav-item"><a class="nav-link" href="/research-center/">Research Center</a></li>
+
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="site-nav-government-users-link" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Government Users</a>
+
+            <div class="dropdown-menu dropdown-menu-right dropdown-menu-xl-left" aria-labelledby="site-nav-government-users-link">
+              <div class="dropdown-menu-wrapper">
+                <a class="dropdown-item" href="/government/">For Government Users</a>
+                <a class="dropdown-item" href="/government/federal-investments-program/">Federal Investments Program</a>
+                <a class="dropdown-item" href="/government/slgs/">SLGS &amp; SLGSafe</a>
+                <a class="dropdown-item" href="/government/security-liquidation-proceeds/">Security Liquidation &amp; Proceeds</a>
+                <a class="dropdown-item" href="/government/federal-borrowings-program/">Federal Borrowings Program</a>
+                <a class="dropdown-item" href="/government/treasury-managed-accounts/">Treasury Managed Accounts</a>
+                <a class="dropdown-item" href="/government/funds-management-program-reports/">Funds Management Program Reports</a>
+                <a class="dropdown-item" href="/government/historical-debt-outstanding/">History of the Debt</a>
+                <a class="dropdown-item" href="/government/public-debt-reports/">Public Debt Reports </a>
+                <a class="dropdown-item" href="/government/interest-rates-and-prices/">Interest Rates and Prices </a>
+              </div>
+            </div>
+          </li>
+        </ul>
+
+        <ul class="navbar-nav nav-text-small order-lg-1">
+          <li class="nav-item"><a class="nav-link" href="/mailing-lists/">Mailing Lists</a></li>
+          <li class="nav-item"><a class="nav-link" href="/news/">News</a></li>
+          <li class="nav-item"><a class="nav-link" href="/about/">About</a></li>
+          <li class="nav-item"><a class="nav-link" href="/forms/">Forms</a></li>
+          <li class="nav-item"><a class="nav-link" href="/help-center/">Help Center</a></li>
+          <li class="nav-item"><a class="nav-link" href="/contact-us/">Contact Us</a></li>
+        </ul>
+
+      </div>
+    </nav>
+  </div>
+
+</header>
+
+
+
+    <main id="main">
+
+      
+
+      
+  
+
+  
+<section>
+  <div class="section-container container-xxl">
+    
+  
+    
+<nav class="breadcrumb-container" aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    
+      <li class="breadcrumb-item"><a href="/auctions/">Auctions</a></li>
+    
+      <li style="padding-left: 0.2rem;">How Auctions Work</li>
+  </ol>
+</nav>
+
+  
+    
+<div class="body-copy">
+  
+    
+      <h1>How Auctions Work</h1>
+
+      <p>Auctions happen in four steps:</p>
+      <ol>
+        <li><a href="#announce">We announce the auction</a></li>
+        <li><a href="#hold">We hold the auction</a></li>
+        <li><a href="#bidding">You bid for the amount you want</a></li>
+        <li><a href="#issue">We issue the securities</a></li>
+      </ol>
+
+      <h2 id="announce">We announce the auction</h2>
+      <p>Each announcement includes this information:</p>
+      <ul>
+        <li>What security we are auctioning</li>
+        <li>The amount we are offering</li>
+        <li>Auction date</li>
+        <li>Issue date</li>
+        <li>Maturity date</li>
+        <li>Terms and conditions of the offering</li>
+        <li>Closing times for non-competitive and competitive bidding</li>
+        <li>Other relevant information</li>
+      </ul>
+      <p>To know when an auction will take place, you can:</p>
+      <ul>
+        <li><a href="/mailing-lists/">Sign up to get auction announcements</a></li>
+        <li><a href="/auctions/upcoming/">See a list of upcoming auction announcements</a><br>
+          (Updated every Friday by 10:45 AM, Eastern U.S. time)</li>
+        <li>Look in newspapers that include our announcements</li>
+        <li>Check our page <a href="/auctions/when-auctions-happen/">When auctions happen (schedules)</a></li>
+      </ul>
+      <p>Four times a year, the Department of the Treasury holds a press conference to discusses Treasury marketable security auctions. This usually happens on the first Wednesday in February, May, August, and November. At each of these press conferences, Treasury usually gives the tentative auction schedule for the next six months.</p>
+      <p>See the <a href="https://home.treasury.gov/system/files/221/Tentative-Auction-Schedule.pdf" target="_blank" rel="noreferrer noopener">current tentative six-month auction schedule</a> (PDF).</p>
+      <p>During a press conference, Treasury may also announce other decisions relating to the auction schedule or Treasury marketable securities in general. The Treasury Department's website has information on the <a href="https://home.treasury.gov/policy-issues/financing-the-government/quarterly-refunding" target="_blank" rel="noreferrer noopener">quarterly press conferences</a>.</p>
+  
+  
+</div>
+
+  
+  </div>
+</section>
+
+
+  
+<section class="colored blue">
+  <div class="section-container container-xxl">
+    
+  
+    
+<div class="grid-row-container row ">
+  
+    
+      
+<div class="grid-column-container col-md">
+  <div class="negate">
+    <div class="consume">
+      
+      
+        
+<div class="body-copy">
+  
+        
+          <h2>Financial Institutions:</h2>
+          <h2 class="h1">Participate in auctions with the Debt Financing System.</h2>
+          <p>An application for the exclusive use of institutions that provides direct access to U.S. Treasury auctions.</p>
+        
+        
+</div>
+
+      
+        
+<div class="buttons-block">
+  <div class="wrapper">
+
+    
+
+    
+      <a class="btn btn-outline-td-blue" href="/auctions/taaps/" >Read More</a>
+    
+
+  </div>
+</div>
+
+      
+      
+    </div>
+  </div>
+</div>
+
+    
+      
+<div class="grid-column-container col-md">
+  <div class="negate">
+    <div class="consume">
+      
+      
+        
+<figure>
+  <img src="/images/content/shutterstock_1075401791.png" alt="Financial Institutions"
+  >
+  
+</figure>
+
+      
+      
+    </div>
+  </div>
+</div>
+
+    
+    
+</div>
+
+  
+  
+  </div>
+</section>
+
+  
+  
+<section>
+  <div class="section-container container-xxl">
+    
+    
+    
+<div class="body-copy">
+  
+      
+      <h2 id="hold">We hold the auction</h2>
+      <p>At the auction, Treasury first accepts all the non-competitive bids that comply with the auction rules.</p>
+      <p>Then, we accept competitive bids based on their rate, yield, or discount margin (from lowest to highest) until the entire amount of the offering has been awarded.</p>
+      <p>All successful bidders get the same rate, yield, or discount margin as the highest accepted bid.</p>
+      <p>If you bid through your TreasuryDirect account, you can see the results of your bid after 5 PM Eastern time on auction day. In your TreasuryDirect account, select Current Holdings, Pending Purchases and Reinvestments, select the pending security you wish to view, and then Submit. The price you see is for each $100 of your bid.</p>
+      <p>For a more general view of the auction results, you can:</p>
+      <ul>
+        <li><a href="/mailing-lists/">Sign up to get results by email</a></li>
+        <li>See the <a href="/auctions/results/">auction results</a> on this website</li>
+        <li>Look in newspapers that include our auction results</li>
+      </ul>
+      <p>Check to see if your new securities will accrue interest before we issue them. That may affect how much money you must have in your account before the issue date.</p>
+    
+    
+</div>
+
+  
+  
+  </div>
+</section>
+
+
+  
+<section>
+  <div class="section-container container-xxl">
+    
+  
+    
+<div class="body-copy">
+  
+    
+      <h2 id="bidding">You bid for the amount you want</h2>
+      <h4>Who may bid?</h4>
+      <p>All auctions are open to the public.</p>
+      <p>Institutional investors may have an account that lets them bid directly, saving the cost and effort of an intermediary.</p>
+      <p>Other investors may bid either through a TreasuryDirect account or through a bank, broker, or dealer. (Exception: Bids for Cash Management Bills must be through a bank, broker, or dealer.)</p>
+      <p>Individuals as well as several types of entities (such as corporations, estates, partnerships, and trusts) may have a TreasuryDirect account.</p>
+      <p><a href="/indiv/help/treasurydirect-help/user-guide/291-300/#292">About entity accounts</a></p>
+      <p><a href="/RS/UN-AccountCreate.do">Open a TreasuryDirect account</a></p>
+      <p><a href="/log-in/">Log in to your TreasuryDirect account</a></p>
+      <p>Banks, brokers, and dealers work through the Commercial Book-Entry System.</p>
+      <p><a href="/auctions/how-auctions-work/where-you-hold-securities/">See more about TreasuryDirect and the commercial book-entry system</a></p>
+      <p>For more details about who may bid, check our <a href="/auctions/how-auctions-work/who-may-bid/">Who may bid? Questions and Answers</a>.</p>
+
+      <h4>How do I bid?</h4>
+      <p>Bids can be non-competitive or competitive.</p>
+
+    
+</div>
+
+
+    
+<div class="card-deck dual-boxes-group">
+  
+
+      
+<div class="dual-box card">
+  <div class="card-body">
+    
+    <div class="negate">
+      <div class="consume">
+      
+        
+
+        <h3 class="h2">Non-competitive Bidding</h3>
+        <p>Maximum: $10 million per auction. You agree to accept the rate, yield, or discount margin determined at the auction. If you are using your TreasuryDirect account, you must bid non-competitively.</p>
+
+      
+        
+        
+        
+
+        
+        
+      </div>
+    </div>
+    
+  </div>
+</div>
+
+
+      
+<div class="dual-box card">
+  <div class="card-body">
+    
+    <div class="negate">
+      <div class="consume">
+      
+        
+
+        <h3 class="h2">Competitive Bidding</h3>
+        <p>Maximum: 35% of the offering amount. You specify the rate, yield, or discount margin that you will accept. To bid competitively, you must use a bank, broker, or dealer.</p>
+
+      
+        
+        
+        
+
+        
+        
+      </div>
+    </div>
+    
+  </div>
+</div>
+
+
+    
+</div>
+ 
+
+    <p>For more on how to bid, see <a href="/marketable-securities/buying-a-marketable-security/">Buying a Treasury marketable security</a></p>
+    <p>Also see <a href="/marketable-securities/understanding-pricing/">Understanding pricing and interest rates</a></p>
+    <p>Always pay attention to the closing times for bids.</p>
+
+  
+  </div>
+</section>
+
+
+  
+<section>
+  <div class="section-container container-xxl">
+    
+  
+    
+<div class="body-copy">
+  
+    
+      <h2 id="issue">We issue the securities</h2>
+      <p>The auction date and the issue date are often a few days or even a few weeks apart.</p>
+      <p>On the issue date that was in the auction announcement, you get your awarded securities this way:</p>
+      <div style="width: 80%; margin: auto">
+        <table class="table">
+          <thead>
+            <tr class="bg-td-blue-lighter">
+              <th>If you bid through</th>
+              <th>This is what happens with your new securities</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>your TreasuryDirect account</td>
+              <td>the securities go into your account</td>
+            </tr>
+            <tr>
+              <td>a bank, broker, or dealer</td>
+              <td>the bank, broker, or dealer gets the securities for you</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p>When we issue the securities, we take the money to pay for them from the account you have designated for this purpose.</p>
+      <p>You then own the securities. You may keep them until they reach the end of their term (mature), or you may sell or transfer them before that time.</p>
+      <p>For more about each type of security, including when it matures, how it earns interest, and more, see the page about that type of security: <a href="/marketable-securities/treasury-bills/">Bills</a>, <a href="/marketable-securities/treasury-notes/">Notes</a>, <a href="/marketable-securities/treasury-bonds/">Bonds</a>, <a href="/marketable-securities/tips/">TIPS</a>, and <a href="/marketable-securities/floating-rate-notes/">FRNs</a>.</p>
+
+    
+</div>
+
+  
+  
+  </div>
+</section>
+
+
+
+      
+      <button type="button" class="btn btn-td-blue scrollButton d-print-none" onclick="topFunction()" id="myBtn" title="Back to Top" style="display: none; position: fixed; bottom: 1em; right: 1em; opacity: 50%; z-index: 99999999">
+        <svg class="bi-chevron-down" style="transform: rotate(180deg)" width="2em" height="2em" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
+          <path fill="currentColor" d="M143 352.3L7 216.3c-9.4-9.4-9.4-24.6 0-33.9l22.6-22.6c9.4-9.4 24.6-9.4 33.9 0l96.4 96.4 96.4-96.4c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9l-136 136c-9.2 9.4-24.4 9.4-33.8 0z"></path>
+        </svg>
+      </button>
+
+    </main>
+
+    
+
+    
+  
+<footer>
+
+  <nav>
+    <div class="container-xxl hide-print">
+      <div class="wrapper py-5">
+      
+        <div class="row mb-4 text-md-center">
+          <div class="col-12">
+          
+            <a href="/"><img src="/images/logo-treasurydirect-color.svg" alt="TreasuryDirect Home"></a>
+            
+            <form id="search-form-page-footer" action="https://search.usa.gov/search" accept-charset="UTF-8" method="get" class="py-2 mx-md-auto">
+              <div class="input-group">
+                <input type="text" name="query" id="query-page-footer" autocomplete="off" class="form-control" placeholder="Search…" aria-label="Search TreasuryDirect" aria-describedby="button-site-search-footer-submit">
+                <input name="utf8" type="hidden" value="&#x2713;">
+                <input type="hidden" name="affiliate" id="affiliate2" value="treasurydirect">
+                <div class="input-group-append">
+                  <button class="btn btn-td-green font-weight-bold" type="submit" id="button-site-search-footer-submit" aria-label="Submit">
+                    <span class="icon-search-solid-white"></span>
+                  </button>
+                </div>
+              </div>
+            </form>
+            
+          </div>
+        </div>
+        
+        <div class="row">
+        
+          <div class="col-12 col-md-4">
+            <h3>Connect With Us</h3>
+            <ul class="list-unstyled nav-text-large social-icons">
+              <li><a class="no-icon" target="_blank" rel="noopener noreferrer nofollow" href="https://twitter.com/treasurydirect/"><span class="icon-twitter mr-2"></span>X (formerly Twitter)</a></li>
+              <li><a class="no-icon" target="_blank" rel="noopener noreferrer nofollow" href="https://www.facebook.com/fiscalservice/"><span class="icon-facebook mr-2"></span>Facebook</a></li>
+              <li><a class="no-icon" target="_blank" rel="noopener noreferrer nofollow" href="https://www.youtube.com/TreasuryDirect/"><span class="icon-youtube mr-2"></span>YouTube</a></li>
+              <li><a class="no-icon" href="/rss/"><span class="icon-rss mr-2"></span>RSS Feeds</a></li>
+            </ul>
+          </div>
+          
+          <div class="col-12 col-md-4">
+            <h3>Legal Information</h3>
+            <ul class="list-unstyled nav-text-small">
+              <li><a href="/legal-information/foia/">Freedom of Information Act</a></li>
+              <li><a href="/legal-information/privacy/">Privacy</a></li>
+              <li><a href="/legal-information/terms/">Terms & Conditions</a></li>
+              <li><a href="/legal-information/data-quality/">Data Quality</a></li>
+              <li><a href="/legal-information/developers/">For Web Developers</a></li>
+              <li><a href="/legal-information/accessibility/">Accessibility</a></li>
+            </ul>
+          </div>
+          
+          <div class="col-12 col-md-4">
+            <h3>Related Sites</h3>
+            <ul class="list-unstyled nav-text-small">
+              <li><a target="_blank" rel="noopener noreferrer" href="https://www.treasury.gov">treasury.gov</a></li>
+              <li><a target="_blank" rel="noopener noreferrer" href="https://fiscaldata.treasury.gov">fiscaldata.treasury.gov</a></li>
+              <li><a target="_blank" rel="noopener noreferrer" href="https://www.usaspending.gov">USAspending.gov</a></li>
+              <li><a target="_blank" rel="noopener noreferrer" href="https://fiscal.treasury.gov">Bureau of the Fiscal Service</a></li>
+              <li><a target="_blank" rel="noopener noreferrer" href="https://www.usa.gov">USA.gov</a></li>
+              <li><a target="_blank" rel="noopener noreferrer" href="https://www.data.gov">Data.gov</a></li>
+              <li><a target="_blank" rel="noopener noreferrer" href="https://www.regulations.gov">Regulations.gov</a></li>
+            </ul>
+          </div>
+          
+        </div>
+        
+      </div>
+    </div>
+  </nav>
+  
+</footer>
+
+
+    
+    <script src="/scripts/jquery.min.js" charset="utf-8"></script>
+    <script src="/scripts/bootstrap.bundle.min.js" charset="utf-8"></script>
+    <script src="/scripts/components.js" charset="utf-8"></script>
+    <script src="/scripts/back-to-top.js" charset="utf-8"></script>
+    <!-- START DAP Universal Analytics Code -->
+    <script id="_fed_an_ua_tag" src="https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=TRE&subagency=FS&exts=xml,prn,json,csv,tsv"></script>
+    <!-- END DAP Universal Analytics Code -->
+    <!-- Google Translate Code -->
+    <script type="text/javascript">
+      function googleTranslateElementInit() {
+        new google.translate.TranslateElement({
+          pageLanguage: 'en',
+          floatPosition: google.translate.TranslateElement.FloatPosition.BOTTOM_RIGHT
+        });
+      }
+    </script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <script type="text/javascript">
+     // ---------------------------Production snippet-------------------------------
+     // Verint Production Embed Script v2.01
+     // DO NOT MODIFY BELOW THIS LINE *****************************************
+     ;(function (g) {
+       var d = document, am = d.createElement('script'), h = d.head || d.getElementsByTagName("head")[0], fsr = 'fsReady',
+               aex = {
+                 "src": "//eex-gateway.voc.ttecgov.us/sites/treasurydirect-gov/production/gateway.min.js",
+                 "type": "text/javascript",
+                 "async": "true",
+                 "data-vendor": "fs",
+                 "data-role": "gateway"
+               };
+       for (var attr in aex) { am.setAttribute(attr, aex[attr]); } h.appendChild(am); g[fsr] || (g[fsr] = function () { var aT = '__' + fsr + '_stk__'; g[aT] = g[aT] || []; g[aT].push(arguments); });
+     })(window);
+     // DO NOT MODIFY ABOVE THIS LINE *****************************************
+     fsReady(function() {
+       var currentURL = window.location.href;
+       FSR.CPPS.set("url", currentURL);
+       /*
+       FSR.CPPS.set('name','value'); // use single quotes when passing a static-value
+       FSR.CPPS.set('name2',somevariable); // don't use quotes for a dynamic value
+       FSR.CPPS.set('name3',othervariable); // add as many CPPs as you like in this way
+       */
+     });
+      // DO NOT MODIFY ABOVE THIS LINE *****************************************
+
+    </script>
+    
+  </body>
+</html>

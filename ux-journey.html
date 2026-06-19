@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Account Creation Journey — TreasuryDirect</title>
+  <link rel="icon" href="/images/favicon.svg" type="image/svg+xml">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      background: #f4f6f9;
+      color: #1a1a2e;
+      padding: 2rem 1.5rem;
+      line-height: 1.5;
+    }
+    .container { max-width: 1200px; margin: 0 auto; }
+
+    /* Header */
+    .journey-header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+    .journey-header h1 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: #0a2e5c;
+      letter-spacing: -0.02em;
+    }
+    .journey-header p {
+      color: #5a6a7a;
+      font-size: 0.95rem;
+      margin-top: 0.4rem;
+    }
+    .journey-header .gov-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: #0a2e5c;
+      color: #fff;
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 0.25rem 0.75rem;
+      border-radius: 100px;
+      margin-bottom: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Stepped progress bar */
+    .progress-bar {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 2.5rem;
+      padding: 0 0.5rem;
+      position: relative;
+    }
+    .progress-bar::before {
+      content: '';
+      position: absolute;
+      top: 14px;
+      left: 2rem;
+      right: 2rem;
+      height: 2px;
+      background: #d0d7de;
+      z-index: 0;
+    }
+    .progress-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.35rem;
+      z-index: 1;
+      flex: 1;
+    }
+    .progress-step .circle {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+      background: #d0d7de;
+      color: #fff;
+      transition: background 0.2s;
+    }
+    .progress-step.active .circle {
+      background: #0a2e5c;
+      box-shadow: 0 0 0 4px rgba(10,46,92,0.15);
+    }
+    .progress-step.completed .circle {
+      background: #1a7b3a;
+    }
+    .progress-step .label {
+      font-size: 0.6rem;
+      color: #6b7a8a;
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      max-width: 72px;
+    }
+    .progress-step.active .label { color: #0a2e5c; font-weight: 600; }
+
+    /* Card grid */
+    .card-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    .journey-card {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+      border: 1px solid #e6eaef;
+      overflow: hidden;
+      transition: box-shadow 0.2s;
+    }
+    .journey-card:hover {
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    /* Card header */
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid #eef1f5;
+      background: #fafbfc;
+    }
+    .card-header .step-number {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: #0a2e5c;
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.85rem;
+      flex-shrink: 0;
+    }
+    .card-header h2 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #0a2e5c;
+      flex: 1;
+    }
+    .card-header .step-tag {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: #6b7a8a;
+      background: #eef1f5;
+      padding: 0.2rem 0.6rem;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+
+    /* Card body */
+    .card-body {
+      padding: 1.25rem;
+    }
+
+    /* Two-column layout inside cards */
+    .card-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+    @media (max-width: 700px) {
+      .card-row { grid-template-columns: 1fr; }
+    }
+
+    /* Checklist */
+    .checklist { list-style: none; padding: 0; }
+    .checklist li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+      padding: 0.35rem 0;
+      font-size: 0.875rem;
+      color: #2a3a4a;
+    }
+    .checklist li .check-icon {
+      flex-shrink: 0;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #e8f0e8;
+      color: #1a7b3a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.6rem;
+      margin-top: 0.15rem;
+    }
+
+    /* Form mock */
+    .form-mock { display: flex; flex-direction: column; gap: 0.75rem; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+    .form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.75rem; }
+    .form-group { display: flex; flex-direction: column; gap: 0.2rem; }
+    .form-group label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: #4a5a6a;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+    .form-group .input-mock {
+      border: 1px solid #d0d7de;
+      border-radius: 6px;
+      padding: 0.55rem 0.75rem;
+      font-size: 0.85rem;
+      color: #6b7a8a;
+      background: #f8f9fb;
+    }
+    .form-group .input-mock.val { color: #1a2a3a; }
+
+    /* Info callout */
+    .info-callout {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.6rem;
+      background: #f0f4fa;
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      font-size: 0.8rem;
+      color: #2a4a6a;
+      border-left: 3px solid #0a2e5c;
+      margin-top: 0.75rem;
+    }
+    .info-callout .icon {
+      flex-shrink: 0;
+      font-size: 1rem;
+      margin-top: 0.05rem;
+    }
+
+    /* Security questions */
+    .sec-q {
+      border: 1px solid #e6eaef;
+      border-radius: 8px;
+      padding: 0.75rem;
+    }
+    .sec-q .q-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #4a5a6a;
+      margin-bottom: 0.3rem;
+    }
+
+    /* Image selection mock */
+    .image-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.5rem;
+      margin: 0.5rem 0;
+    }
+    .image-grid .img-option {
+      aspect-ratio: 1;
+      border-radius: 6px;
+      border: 2px solid #e6eaef;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f8f9fb;
+      font-size: 1.5rem;
+      color: #8a9aa8;
+      cursor: default;
+      transition: border-color 0.15s;
+    }
+    .image-grid .img-option.selected {
+      border-color: #0a2e5c;
+      background: #eef4fa;
+      color: #0a2e5c;
+    }
+
+    /* Button mock */
+    .btn-mock {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: #0a2e5c;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 0.6rem 1.25rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: default;
+      margin-top: 0.5rem;
+    }
+    .btn-mock.subtle {
+      background: transparent;
+      color: #0a2e5c;
+      border: 1px solid #d0d7de;
+    }
+
+    /* Radio mock */
+    .radio-option {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.6rem 0.75rem;
+      border: 1px solid #e6eaef;
+      border-radius: 8px;
+      margin-bottom: 0.4rem;
+      cursor: default;
+    }
+    .radio-option.selected {
+      border-color: #0a2e5c;
+      background: #f0f4fa;
+    }
+    .radio-option .radio-dot {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 2px solid #d0d7de;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .radio-option.selected .radio-dot {
+      border-color: #0a2e5c;
+    }
+    .radio-option.selected .radio-dot::after {
+      content: '';
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #0a2e5c;
+    }
+    .radio-option .radio-label {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: #1a2a3a;
+    }
+    .radio-option .radio-desc {
+      font-size: 0.75rem;
+      color: #6b7a8a;
+      margin-left: auto;
+    }
+
+    /* Confirmation screen */
+    .confirmation-icon {
+      text-align: center;
+      padding: 1.5rem 0 0.5rem;
+    }
+    .confirmation-icon .big-icon {
+      font-size: 3rem;
+      color: #1a7b3a;
+    }
+    .confirmation-text {
+      text-align: center;
+      max-width: 480px;
+      margin: 0.5rem auto 1rem;
+      font-size: 0.9rem;
+      color: #4a5a6a;
+    }
+    .next-steps {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+    .next-step-card {
+      border: 1px solid #e6eaef;
+      border-radius: 8px;
+      padding: 0.75rem;
+      font-size: 0.8rem;
+    }
+    .next-step-card h4 {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #0a2e5c;
+      margin-bottom: 0.2rem;
+    }
+    .next-step-card p {
+      color: #5a6a7a;
+      font-size: 0.75rem;
+    }
+    .next-step-card.success h4 { color: #1a7b3a; }
+    .next-step-card.warning h4 { color: #b8860b; }
+
+    /* Footer */
+    .journey-footer {
+      text-align: center;
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid #e6eaef;
+      font-size: 0.75rem;
+      color: #8a9aa8;
+    }
+    .journey-footer a { color: #0a2e5c; text-decoration: none; }
+
+    /* Government banner */
+    .gov-banner {
+      background: #0a2e5c;
+      color: #fff;
+      font-size: 0.7rem;
+      padding: 0.4rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      border-radius: 8px;
+      margin-bottom: 1.5rem;
+      max-width: 600px;
+    }
+    .gov-banner .flag { width: 16px; height: auto; filter: brightness(10); opacity: 0.85; }
+    .divider { border: none; border-top: 1px solid #eef1f5; margin: 0.75rem 0; }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Header -->
+  <div class="journey-header">
+    <div class="gov-badge">&#9679; TreasuryDirect &middot; Official Government Site</div>
+    <h1>Creating a New Individual TreasuryDirect Account</h1>
+    <p>Step-by-step onboarding journey &mdash; 7 screens from entry to confirmation</p>
+  </div>
+
+  <!-- Progress bar -->
+  <div class="progress-bar">
+    <div class="progress-step completed"><div class="circle">1</div><div class="label">Entry</div></div>
+    <div class="progress-step completed"><div class="circle">2</div><div class="label">Eligibility</div></div>
+    <div class="progress-step completed"><div class="circle">3</div><div class="label">Account Type</div></div>
+    <div class="progress-step active"><div class="circle">4</div><div class="label">Personal Info</div></div>
+    <div class="progress-step"><div class="circle">5</div><div class="label">Bank Info</div></div>
+    <div class="progress-step"><div class="circle">6</div><div class="label">Security</div></div>
+    <div class="progress-step"><div class="circle">7</div><div class="label">Confirmation</div></div>
+  </div>
+
+  <div class="card-grid">
+
+    <!-- Card 1: Entry -->
+    <div class="journey-card">
+      <div class="card-header">
+        <div class="step-number">1</div>
+        <h2>Entry &mdash; Landing on TreasuryDirect</h2>
+        <span class="step-tag">Screen</span>
+      </div>
+      <div class="card-body">
+        <div class="card-row">
+          <div>
+            <p style="font-size:0.88rem;color:#4a5a6a;margin-bottom:0.75rem;">
+              User visits <strong>treasurydirect.gov</strong> and sees the homepage
+              with the login panel on the right.
+            </p>
+            <div style="border:1px solid #d0d7de;border-radius:8px;padding:1rem;background:#fafbfc;">
+              <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.75rem;">
+                <span style="font-weight:700;color:#0a2e5c;font-size:1.1rem;">Login</span>
+                <span style="font-size:0.75rem;color:#6b7a8a;margin-left:auto;">secure area</span>
+              </div>
+              <div style="border:1px solid #d0d7de;border-radius:6px;padding:0.55rem 0.75rem;font-size:0.8rem;color:#6b7a8a;background:#fff;margin-bottom:0.5rem;">Account Number</div>
+              <div style="border:1px solid #d0d7de;border-radius:6px;padding:0.55rem 0.75rem;font-size:0.8rem;color:#6b7a8a;background:#fff;margin-bottom:0.75rem;">Password</div>
+              <div style="display:flex;gap:0.5rem;">
+                <span style="background:#0a2e5c;color:#fff;padding:0.4rem 1rem;border-radius:6px;font-size:0.8rem;font-weight:600;">Log In</span>
+              </div>
+              <hr style="border:none;border-top:1px solid #d0d7de;margin:0.75rem 0;">
+              <div style="font-size:0.8rem;"><a href="#" style="color:#0a2e5c;font-weight:600;text-decoration:none;">Open a New Account</a></div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;justify-content:center;padding-left:0.5rem;">
+            <div style="font-size:0.88rem;color:#2a3a4a;">
+              <strong style="color:#0a2e5c;">Trigger:</strong> User clicks <em>&ldquo;Open a New Account&rdquo;</em> in the login box or the link on the login help page.
+            </div>
+            <div style="margin-top:1rem;background:#f0f4fa;border-radius:8px;padding:0.75rem;font-size:0.8rem;color:#4a5a6a;">
+              <strong>&#8594; Redirects to:</strong> Account creation entry point
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 2: Intro / Eligibility -->
+    <div class="journey-card">
+      <div class="card-header">
+        <div class="step-number">2</div>
+        <h2>Intro &amp; Eligibility</h2>
+        <span class="step-tag">Screen</span>
+      </div>
+      <div class="card-body">
+        <div class="card-row">
+          <div>
+            <div class="gov-banner" style="margin-bottom:0.75rem;">
+              <span class="flag">&#9733;</span> Secure &bull; Expected time: ~10 minutes
+            </div>
+            <p style="font-size:0.85rem;color:#4a5a6a;margin-bottom:0.75rem;">
+              Before starting, make sure you have the following ready:
+            </p>
+            <ul class="checklist">
+              <li><span class="check-icon">&#10003;</span> Taxpayer Identification Number / Social Security Number</li>
+              <li><span class="check-icon">&#10003;</span> U.S. address of record</li>
+              <li><span class="check-icon">&#10003;</span> Checking or savings account (your own)</li>
+              <li><span class="check-icon">&#10003;</span> Bank routing number and account number</li>
+              <li><span class="check-icon">&#10003;</span> Valid email address</li>
+              <li><span class="check-icon">&#10003;</span> Browser with 128-bit encryption</li>
+              <li><span class="check-icon">&#10003;</span> You must be 18 or older for a primary account</li>
+            </ul>
+          </div>
+          <div>
+            <div class="info-callout" style="margin-top:0;">
+              <span class="icon">&#9432;</span>
+              <div>
+                <strong>Why this matters:</strong><br>
+                TreasuryDirect is a <strong>United States government financial system</strong>. All information is verified against government records. Your SSN/TIN, address, and banking details must match what&rsquo;s on file with the IRS and your financial institution.
+              </div>
+            </div>
+            <div style="margin-top:0.75rem;text-align:center;">
+              <span class="btn-mock">Begin Account Setup &rarr;</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 3: Account Type -->
+    <div class="journey-card">
+      <div class="card-header">
+        <div class="step-number">3</div>
+        <h2>Account Type Selection</h2>
+        <span class="step-tag">Screen</span>
+      </div>
+      <div class="card-body">
+        <div class="card-row">
+          <div>
+            <p style="font-size:0.85rem;color:#4a5a6a;margin-bottom:0.5rem;">Choose the type of account you want to open.</p>
+            <div class="radio-option selected">
+              <div class="radio-dot"></div>
+              <div>
+                <div class="radio-label">Individual</div>
+                <div style="font-size:0.75rem;color:#6b7a8a;">A single owner with full rights</div>
+              </div>
+              <span class="radio-desc" style="color:#1a7b3a;">&#10003; Selected</span>
+            </div>
+            <div class="radio-option">
+              <div class="radio-dot"></div>
+              <div>
+                <div class="radio-label">Entity</div>
+                <div style="font-size:0.75rem;color:#6b7a8a;">Corporation, trust, estate, etc.</div>
+              </div>
+              <span class="radio-desc" style="color:#8a9aa8;">alt</span>
+            </div>
+            <div class="radio-option">
+              <div class="radio-dot"></div>
+              <div>
+                <div class="radio-label">Custodial (Minor)</div>
+                <div style="font-size:0.75rem;color:#6b7a8a;">For a child under 18</div>
+              </div>
+              <span class="radio-desc" style="color:#8a9aa8;">alt</span>
+            </div>
+            <div class="radio-option">
+              <div class="radio-dot"></div>
+              <div>
+                <div class="radio-label">Business</div>
+                <div style="font-size:0.75rem;color:#6b7a8a;">Sole proprietorship, partnership, LLC</div>
+              </div>
+              <span class="radio-desc" style="color:#8a9aa8;">alt</span>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;justify-content:center;">
+            <div style="background:#f0f4fa;border-radius:8px;padding:1rem;text-align:center;border:2px solid #0a2e5c;">
+              <div style="font-size:2rem;margin-bottom:0.25rem;">&#128100;</div>
+              <div style="font-weight:700;color:#0a2e5c;font-size:1rem;">Individual Account</div>
+              <div style="font-size:0.8rem;color:#4a5a6a;margin-top:0.25rem;">
+                The most common path for personal investors buying and managing U.S. Savings Bonds.
+              </div>
+            </div>
+            <span class="btn-mock" style="margin-top:0.75rem;align-self:center;">Continue &rarr;</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 4: Personal Information -->
+    <div class="journey-card">
+      <div class="card-header">
+        <div class="step-number">4</div>
+        <h2>Personal Information</h2>
+        <span class="step-tag">Screen</span>
+      </div>
+      <div class="card-body">
+        <div class="card-row">
+          <div class="form-mock">
+            <div class="form-row">
+              <div class="form-group"><label>First Name</label><div class="input-mock val">Alex</div></div>
+              <div class="form-group"><label>Last Name</label><div class="input-mock val">Johnson</div></div>
+            </div>
+            <div class="form-group"><label>Social Security Number / Tax ID</label><div class="input-mock">XXX-XX-1234</div></div>
+            <div class="form-group"><label>Date of Birth</label><div class="input-mock">01 / 15 / 1985</div></div>
+            <div class="form-group"><label>Street Address</label><div class="input-mock val">742 Evergreen Terrace</div></div>
+            <div class="form-row-3">
+              <div class="form-group"><label>City</label><div class="input-mock val">Springfield</div></div>
+              <div class="form-group"><label>State</label><div class="input-mock val">IL</div></div>
+              <div class="form-group"><label>ZIP</label><div class="input-mock val">62701</div></div>
+            </div>
+            <div class="form-row">
+              <div class="form-group"><label>Phone</label><div class="input-mock val">(555) 123-4567</div></div>
+              <div class="form-group"><label>Email</label><div class="input-mock val">alex.johnson@example.com</div></div>
+            </div>
+            <div class="form-group"><label>Driver&rsquo;s License / State ID Number</label><div class="input-mock">IL-DL-XX-XXXX-XXXX</div></div>
+            <div class="form-group"><label>Issuing State</label><div class="input-mock val">Illinois</div></div>
+          </div>
+          <div>
+            <div class="info-callout" style="margin-top:0;">
+              <span class="icon">&#128274;</span>
+              <div>
+                <strong>Privacy Note:</strong> Your information is encrypted and used solely for identity verification with government databases. TreasuryDirect does not share your personal data with third parties.
+              </div>
+            </div>
+            <div class="info-callout" style="margin-top:0.5rem;border-left-color:#b8860b;">
+              <span class="icon">&#9888;</span>
+              <div>
+                <strong>Tip:</strong> Your name and SSN must match your IRS records exactly. Discrepancies may delay or prevent account verification.
+              </div>
+            </div>
+            <span class="btn-mock" style="margin-top:0.75rem;">Continue &rarr;</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 5: Bank Information -->
+    <div class="journey-card">
+      <div class="card-header">
+        <div class="step-number">5</div>
+        <h2>Bank Information &mdash; ACH Setup</h2>
+        <span class="step-tag">Screen</span>
+      </div>
+      <div class="card-body">
+        <div class="card-row">
+          <div class="form-mock">
+            <div class="form-group"><label>Account Type</label>
+              <div style="display:flex;gap:0.5rem;">
+                <div style="border:2px solid #0a2e5c;border-radius:6px;padding:0.4rem 0.75rem;font-size:0.8rem;font-weight:600;color:#0a2e5c;background:#f0f4fa;">Checking</div>
+                <div style="border:1px solid #d0d7de;border-radius:6px;padding:0.4rem 0.75rem;font-size:0.8rem;color:#6b7a8a;">Savings</div>
+              </div>
+            </div>
+            <div class="form-group"><label>Bank Routing Number</label><div class="input-mock val">021000021</div></div>
+            <div class="form-group"><label>Account Number</label><div class="input-mock">XXXXXXXX1234</div></div>
+            <div class="form-group"><label>Confirm Account Number</label><div class="input-mock">XXXXXXXX1234</div></div>
+          </div>
+          <div>
+            <div style="background:#f0f8f0;border-radius:8px;padding:0.75rem 1rem;font-size:0.8rem;color:#1a5a2a;border:1px solid #c8e0c8;">
+              <strong>&#10003; Used for TreasuryDirect purchases and redemptions.</strong><br>
+              This account will be linked to your TreasuryDirect account for buying bonds and receiving proceeds from redemptions.
+            </div>
+            <div class="info-callout" style="margin-top:0.5rem;border-left-color:#0a2e5c;">
+              <span class="icon">&#128179;</span>
+              <div>
+                <strong>ACH Authorisation:</strong> By adding a bank account, you authorise TreasuryDirect to initiate electronic debits and credits to this account for security purchases and redemptions.
+              </div>
+            </div>
+            <span class="btn-mock" style="margin-top:0.75rem;">Continue &rarr;</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 6: Security Setup -->
+    <div class="journey-card">
+      <div class="card-header">
+        <div class="step-number">6</div>
+        <h2>Security Setup</h2>
+        <span class="step-tag">Screen</span>
+      </div>
+      <div class="card-body">
+        <div class="card-row">
+          <div class="form-mock">
+            <div class="form-group"><label>Create Password</label><div class="input-mock">&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;</div></div>
+            <div class="form-group"><label>Confirm Password</label><div class="input-mock">&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;</div></div>
+            <div class="form-group"><label>Password Reminder (hint)</label><div class="input-mock val">My first pet plus birth year</div></div>
+            <hr class="divider">
+            <div class="form-group"><label>Choose a Personalised Image</label></div>
+            <div class="image-grid">
+              <div class="img-option selected">&#127775;</div>
+              <div class="img-option">&#128153;</div>
+              <div class="img-option">&#127754;</div>
+              <div class="img-option">&#127800;</div>
+              <div class="img-option">&#127752;</div>
+              <div class="img-option">&#127794;</div>
+              <div class="img-option">&#128150;</div>
+              <div class="img-option">&#127775;</div>
+            </div>
+            <div class="form-group"><label>Custom Caption</label><div class="input-mock val">My secure image</div></div>
+          </div>
+          <div>
+            <p style="font-size:0.8rem;font-weight:600;color:#0a2e5c;margin-bottom:0.5rem;">Security Questions</p>
+            <div class="sec-q" style="margin-bottom:0.5rem;">
+              <div class="q-label">Question 1: What was your childhood nickname?</div>
+              <div class="input-mock val" style="padding:0.4rem 0.6rem;font-size:0.8rem;">Sammy</div>
+            </div>
+            <div class="sec-q" style="margin-bottom:0.5rem;">
+              <div class="q-label">Question 2: What street did you grow up on?</div>
+              <div class="input-mock val" style="padding:0.4rem 0.6rem;font-size:0.8rem;">Oak Street</div>
+            </div>
+            <div class="sec-q">
+              <div class="q-label">Question 3: What was the name of your first pet?</div>
+              <div class="input-mock val" style="padding:0.4rem 0.6rem;font-size:0.8rem;">Max</div>
+            </div>
+            <div class="info-callout" style="margin-top:0.75rem;border-left-color:#b8860b;">
+              <span class="icon">&#128274;</span>
+              <div>
+                <strong>Security Reminder:</strong> Your personalised image and caption will appear each time you log in. If you don&rsquo;t see your image, do not enter your password and contact TreasuryDirect immediately.
+              </div>
+            </div>
+            <span class="btn-mock" style="margin-top:0.75rem;">Submit Application &rarr;</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 7: Confirmation -->
+    <div class="journey-card">
+      <div class="card-header">
+        <div class="step-number">7</div>
+        <h2>Confirmation &amp; Next Steps</h2>
+        <span class="step-tag">Screen</span>
+      </div>
+      <div class="card-body">
+        <div class="confirmation-icon">
+          <div class="big-icon">&#10004;&#65039;</div>
+        </div>
+        <div class="confirmation-text">
+          <h3 style="color:#0a2e5c;font-size:1.1rem;margin-bottom:0.25rem;">Application Submitted Successfully</h3>
+          <p>Your TreasuryDirect Individual account application has been received.</p>
+        </div>
+        <div style="max-width:600px;margin:0 auto;">
+          <div class="info-callout" style="border-left-color:#1a7b3a;background:#f0f8f0;">
+            <span class="icon">&#128197;</span>
+            <div>
+              <strong>What happens next:</strong> TreasuryDirect verifies your personal information against government records. Most verifications complete within minutes. You will receive an email with your account number and next steps.
+            </div>
+          </div>
+        </div>
+        <div class="next-steps" style="max-width:600px;margin:0.75rem auto 0;">
+          <div class="next-step-card success">
+            <h4>&#10003; If verification succeeds</h4>
+            <p>Your account opens immediately. You will receive your account number and can log in to buy bonds, manage your portfolio, and set up recurring purchases.</p>
+          </div>
+          <div class="next-step-card warning">
+            <h4>&#9888; If verification fails</h4>
+            <p>You may need to complete a <strong>printable authentication form</strong> (PDF) and mail it with copies of identifying documents to the TreasuryDirect processing centre. Processing takes 2&ndash;4 weeks.</p>
+          </div>
+        </div>
+        <div style="text-align:center;margin-top:1rem;">
+          <span class="btn-mock subtle">&#8592; Return to TreasuryDirect Home</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="journey-footer">
+    <strong>TreasuryDirect &mdash; Bureau of the Fiscal Service &middot; U.S. Department of the Treasury</strong><br>
+    This is a UX journey map. Not an actual login page. No real personal data is displayed.
+  </div>
+
+</div>
+</body>
+</html>

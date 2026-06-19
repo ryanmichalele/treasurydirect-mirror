@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Secure Login — Account Dashboard</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      background: #f0f2f5;
+      color: #1a1a2e;
+      line-height: 1.5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+
+    .login-container {
+      width: 100%;
+      max-width: 420px;
+    }
+
+    .login-card {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.06);
+      border: 1px solid #e0e5ea;
+      padding: 2rem;
+    }
+
+    .login-card .logo-area {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+    .login-card .logo-area h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f2b4f;
+    }
+    .login-card .logo-area p {
+      font-size: 0.85rem;
+      color: #5a6a7a;
+      margin-top: 0.2rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+      margin-bottom: 1rem;
+    }
+    .form-group label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: #3a4a5a;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+    .form-group input {
+      border: 1px solid #d0d7de;
+      border-radius: 8px;
+      padding: 0.75rem 0.85rem;
+      font-size: 0.92rem;
+      color: #1a2a3a;
+      background: #fff;
+      transition: border-color 0.15s, box-shadow 0.15s;
+      width: 100%;
+      font-family: inherit;
+    }
+    .form-group input:focus {
+      outline: none;
+      border-color: #0f2b4f;
+      box-shadow: 0 0 0 3px rgba(15,43,79,0.1);
+    }
+    .form-group input.error {
+      border-color: #c0392b;
+      box-shadow: 0 0 0 3px rgba(192,57,43,0.1);
+    }
+    .form-group .error-msg {
+      font-size: 0.72rem;
+      color: #c0392b;
+      display: none;
+    }
+    .form-group .error-msg.visible { display: block; }
+
+    .checkbox-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1.25rem;
+      font-size: 0.85rem;
+      color: #4a5a6a;
+    }
+    .checkbox-row input[type="checkbox"] { width: 16px; height: 16px; cursor: pointer; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.35rem;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      font-size: 0.92rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      font-family: inherit;
+      transition: background 0.15s, opacity 0.15s;
+      width: 100%;
+    }
+    .btn-primary {
+      background: #0f2b4f;
+      color: #fff;
+    }
+    .btn-primary:hover { background: #163a66; }
+    .btn-primary:disabled { opacity: 0.5; cursor: default; }
+    .btn-secondary {
+      background: transparent;
+      color: #4a5a6a;
+      border: 1px solid #d0d7de;
+    }
+    .btn-secondary:hover { background: #f5f7f9; }
+
+    .helper-links {
+      display: flex;
+      justify-content: space-between;
+      margin: 0.75rem 0 1.25rem;
+      flex-wrap: wrap;
+      gap: 0.3rem;
+    }
+    .helper-links a {
+      font-size: 0.8rem;
+      color: #0f2b4f;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .helper-links a:hover { text-decoration: underline; }
+
+    .demo-hint {
+      text-align: center;
+      font-size: 0.72rem;
+      color: #8a9aa8;
+      margin-top: 0.75rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid #eef1f5;
+    }
+
+    .alert {
+      background: #fdf0ef;
+      border: 1px solid #f5c6cb;
+      border-radius: 8px;
+      padding: 0.65rem 0.85rem;
+      font-size: 0.82rem;
+      color: #a33c2e;
+      margin-bottom: 1rem;
+      display: none;
+    }
+    .alert.visible { display: block; }
+
+    /* Loading overaly */
+    .loading-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(255,255,255,0.92);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .loading-overlay.visible { display: flex; }
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid #e0e5ea;
+      border-top-color: #0f2b4f;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-overlay .load-text {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #0f2b4f;
+    }
+
+    /* Modal overlay */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.35);
+      z-index: 900;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+    .modal-overlay.visible { display: flex; }
+    .modal-box {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+      padding: 1.75rem;
+      max-width: 420px;
+      width: 100%;
+    }
+    .modal-box h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #0f2b4f;
+      margin-bottom: 0.2rem;
+    }
+    .modal-box p {
+      font-size: 0.85rem;
+      color: #5a6a7a;
+      margin-bottom: 1rem;
+    }
+    .modal-box .btn-row {
+      display: flex;
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+    .modal-box .btn-row .btn { flex: 1; }
+    .modal-success {
+      background: #f0f8f0;
+      border: 1px solid #c8e0c8;
+      border-radius: 8px;
+      padding: 0.75rem;
+      font-size: 0.85rem;
+      color: #1a5a2a;
+      text-align: center;
+      display: none;
+    }
+    .modal-success.visible { display: block; }
+
+    .footnote {
+      text-align: center;
+      margin-top: 1rem;
+      font-size: 0.75rem;
+      color: #8a9aa8;
+    }
+    .footnote a { color: #0f2b4f; text-decoration: none; }
+    .footnote a:hover { text-decoration: underline; }
+
+    @media (max-width: 480px) {
+      body { padding: 1rem; }
+      .login-card { padding: 1.5rem; }
+      .helper-links { flex-direction: column; align-items: center; gap: 0.4rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="login-container">
+  <div class="login-card">
+    <div class="logo-area">
+      <h1>Secure Account Login</h1>
+      <p>Access your account dashboard securely.</p>
+    </div>
+
+    <div class="alert" id="loginAlert">Invalid username or password. Please try again.</div>
+
+    <form id="loginForm" novalidate onsubmit="return false;">
+      <div class="form-group">
+        <label for="username">Account ID or Username</label>
+        <input type="text" id="username" placeholder="Enter your username" value="demo-user" autocomplete="username">
+        <div class="error-msg" id="usernameErr">Username or Account ID is required.</div>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="Enter your password" value="DemoPass123!" autocomplete="current-password">
+        <div class="error-msg" id="passwordErr">Password is required.</div>
+      </div>
+
+      <div class="checkbox-row">
+        <input type="checkbox" id="remember" checked>
+        <label for="remember">Remember this device</label>
+      </div>
+
+      <div class="helper-links">
+        <a href="#" onclick="showForgotUsername(); return false;">Forgot username?</a>
+        <a href="#" onclick="showForgotPassword(); return false;">Forgot password?</a>
+        <a href="/RS/UN-AccountCreate.do" target="_blank">Create new account</a>
+      </div>
+
+      <button type="submit" class="btn btn-primary" onclick="handleLogin()">Log In</button>
+    </form>
+
+    <div style="text-align:center;margin-top:0.75rem;">
+      <a href="/" class="btn btn-secondary" style="width:auto;padding:0.5rem 1.25rem;text-decoration:none;display:inline-flex;">&larr; Back to Home</a>
+    </div>
+
+    <div class="demo-hint">Demo only. Do not enter real credentials.</div>
+  </div>
+</div>
+
+<!-- Loading overlay -->
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="spinner"></div>
+  <div class="load-text">Signing you in…</div>
+</div>
+
+<!-- Forgot Username Modal -->
+<div class="modal-overlay" id="forgotUsernameModal">
+  <div class="modal-box">
+    <h3>Forgot Username</h3>
+    <p>Enter the email address associated with your account.</p>
+    <div class="form-group">
+      <label for="fuEmail">Email Address</label>
+      <input type="email" id="fuEmail" placeholder="you@example.com">
+    </div>
+    <div class="modal-success" id="fuSuccess">If an account exists, recovery instructions will be sent to your email address.</div>
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="closeModal('forgotUsernameModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="handleForgotUsername()">Continue</button>
+    </div>
+  </div>
+</div>
+
+<!-- Forgot Password Modal -->
+<div class="modal-overlay" id="forgotPasswordModal">
+  <div class="modal-box">
+    <h3>Forgot Password</h3>
+    <p>Enter your username or email to reset your password.</p>
+    <div class="form-group">
+      <label for="fpInput">Username or Email</label>
+      <input type="text" id="fpInput" placeholder="Username or email">
+    </div>
+    <div class="modal-success" id="fpSuccess">Password reset instructions would be sent in a live system.</div>
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="closeModal('forgotPasswordModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="handleForgotPassword()">Continue</button>
+    </div>
+  </div>
+</div>
+
+<div class="footnote">
+  &copy; 2026 &middot; Demo Financial Platform &middot; <a href="/">Home</a>
+</div>
+
+<script>
+  const DEMO_USER = 'demo-user';
+  const DEMO_PASS = 'DemoPass123!';
+
+  // Prevent real submission
+  document.getElementById('loginForm').addEventListener('submit', function(e) { e.preventDefault(); });
+
+  function handleLogin() {
+    clearErrors();
+    document.getElementById('loginAlert').classList.remove('visible');
+
+    const username = document.getElementById('username').value.trim();
+    const password = document.getElementById('password').value;
+
+    let valid = true;
+    if (!username) { showFieldError('username', 'usernameErr'); valid = false; }
+    if (!password) { showFieldError('password', 'passwordErr'); valid = false; }
+
+    if (!valid) return;
+
+    // Show loading
+    document.getElementById('loadingOverlay').classList.add('visible');
+
+    // Simulate network delay
+    setTimeout(function() {
+      document.getElementById('loadingOverlay').classList.remove('visible');
+
+      if (username === DEMO_USER && password === DEMO_PASS) {
+        // Store session
+        sessionStorage.setItem('demo_logged_in', 'true');
+        sessionStorage.setItem('demo_username', username);
+        window.location.href = '/dashboard/';
+      } else {
+        document.getElementById('loginAlert').classList.add('visible');
+      }
+    }, 1200);
+  }
+
+  function showFieldError(inputId, errId) {
+    document.getElementById(inputId).classList.add('error');
+    document.getElementById(errId).classList.add('visible');
+  }
+
+  function clearErrors() {
+    document.querySelectorAll('.error-msg.visible').forEach(function(e) { e.classList.remove('visible'); });
+    document.querySelectorAll('input.error').forEach(function(e) { e.classList.remove('error'); });
+  }
+
+  // Enter key support
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') {
+      const fmu = document.getElementById('forgotUsernameModal');
+      const fpm = document.getElementById('forgotPasswordModal');
+      if (fmu.classList.contains('visible')) { handleForgotUsername(); return; }
+      if (fpm.classList.contains('visible')) { handleForgotPassword(); return; }
+      handleLogin();
+    }
+  });
+
+  // Forgot Username
+  function showForgotUsername() {
+    document.getElementById('fuEmail').value = '';
+    document.getElementById('fuSuccess').classList.remove('visible');
+    document.getElementById('forgotUsernameModal').classList.add('visible');
+  }
+
+  function handleForgotUsername() {
+    document.getElementById('fuSuccess').classList.add('visible');
+  }
+
+  // Forgot Password
+  function showForgotPassword() {
+    document.getElementById('fpInput').value = '';
+    document.getElementById('fpSuccess').classList.remove('visible');
+    document.getElementById('forgotPasswordModal').classList.add('visible');
+  }
+
+  function handleForgotPassword() {
+    document.getElementById('fpSuccess').classList.add('visible');
+  }
+
+  function closeModal(id) {
+    document.getElementById(id).classList.remove('visible');
+  }
+
+  // Close modals on overlay click
+  document.querySelectorAll('.modal-overlay').forEach(function(m) {
+    m.addEventListener('click', function(e) {
+      if (e.target === m) m.classList.remove('visible');
+    });
+  });
+</script>
+</body>
+</html>

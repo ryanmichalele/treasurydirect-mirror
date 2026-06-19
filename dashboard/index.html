@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dashboard — Account Overview</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      background: #f0f2f5;
+      color: #1a1a2e;
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+
+    /* Top nav */
+    .top-nav {
+      background: #0f2b4f;
+      color: #fff;
+      padding: 0 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 56px;
+    }
+    .top-nav .brand {
+      font-weight: 700;
+      font-size: 1rem;
+      letter-spacing: -0.02em;
+    }
+    .top-nav .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .top-nav .user-badge {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+    .top-nav .user-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+    .top-nav .btn-logout {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: #fff;
+      padding: 0.4rem 0.85rem;
+      border-radius: 6px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.15s;
+    }
+    .top-nav .btn-logout:hover { background: rgba(255,255,255,0.2); }
+
+    /* Main layout */
+    .dash-container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1.5rem;
+    }
+
+    /* Welcome */
+    .welcome-section {
+      margin-bottom: 1.5rem;
+    }
+    .welcome-section h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f2b4f;
+    }
+    .welcome-section p {
+      font-size: 0.88rem;
+      color: #5a6a7a;
+    }
+
+    /* Cards grid */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .stat-card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e0e5ea;
+      padding: 1.25rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+    .stat-card .stat-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      margin-bottom: 0.75rem;
+    }
+    .stat-card .stat-label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: #6b7a8a;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+    .stat-card .stat-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #0f2b4f;
+      margin-top: 0.1rem;
+    }
+    .stat-card .stat-change {
+      font-size: 0.78rem;
+      margin-top: 0.2rem;
+    }
+    .stat-card .stat-change.up { color: #1a7b3a; }
+    .stat-card .stat-change.down { color: #c0392b; }
+
+    /* Two-column layout */
+    .dash-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    /* Panel */
+    .panel {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e0e5ea;
+      padding: 1.25rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+    .panel h3 {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #0f2b4f;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .panel h3 .badge {
+      font-size: 0.65rem;
+      font-weight: 600;
+      background: #eef1f5;
+      color: #5a6a7a;
+      padding: 0.15rem 0.5rem;
+      border-radius: 100px;
+    }
+
+    /* Activity list */
+    .activity-list { list-style: none; }
+    .activity-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.65rem;
+      padding: 0.65rem 0;
+      border-bottom: 1px solid #f0f2f5;
+      font-size: 0.83rem;
+    }
+    .activity-item:last-child { border-bottom: none; }
+    .activity-item .a-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      flex-shrink: 0;
+      margin-top: 0.1rem;
+    }
+    .activity-item .a-icon.buy { background: #e8f5e8; color: #1a7b3a; }
+    .activity-item .a-icon.sell { background: #fdf0ef; color: #c0392b; }
+    .activity-item .a-icon.auth { background: #eef4fa; color: #0f2b4f; }
+    .activity-item .a-info { flex: 1; }
+    .activity-item .a-title { font-weight: 500; color: #1a2a3a; }
+    .activity-item .a-meta { font-size: 0.72rem; color: #8a9aa8; margin-top: 0.1rem; }
+
+    /* Saved items grid */
+    .saved-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem;
+    }
+    .saved-item {
+      border: 1px solid #e0e5ea;
+      border-radius: 8px;
+      padding: 0.65rem;
+      font-size: 0.82rem;
+    }
+    .saved-item .s-title { font-weight: 600; color: #0f2b4f; }
+    .saved-item .s-meta { font-size: 0.72rem; color: #8a9aa8; }
+
+    /* Settings / Profile */
+    .profile-card {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 0;
+    }
+    .profile-card .p-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: #0f2b4f;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .profile-card .p-info { flex: 1; }
+    .profile-card .p-name { font-weight: 600; color: #1a2a3a; }
+    .profile-card .p-email { font-size: 0.8rem; color: #6b7a8a; }
+    .profile-card .btn-settings {
+      background: transparent;
+      border: 1px solid #d0d7de;
+      border-radius: 6px;
+      padding: 0.4rem 0.75rem;
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: #4a5a6a;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .profile-card .btn-settings:hover { background: #f5f7f9; }
+
+    /* Logged-out redirect */
+    .logged-out-msg {
+      text-align: center;
+      padding: 4rem 1rem;
+    }
+    .logged-out-msg h2 { color: #0f2b4f; margin-bottom: 0.5rem; }
+    .logged-out-msg a { color: #0f2b4f; font-weight: 600; }
+
+    @media (max-width: 700px) {
+      .dash-row { grid-template-columns: 1fr; }
+      .cards-grid { grid-template-columns: 1fr 1fr; }
+      .top-nav { padding: 0 1rem; }
+      .dash-container { padding: 1rem; }
+      .saved-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 480px) {
+      .cards-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Top Nav -->
+<nav class="top-nav">
+  <div class="brand">Demo Financial Dashboard</div>
+  <div class="nav-right">
+    <div class="user-badge">
+      <div class="user-avatar" id="navAvatar">U</div>
+      <span id="navUsername">user</span>
+    </div>
+    <button class="btn-logout" onclick="handleLogout()">Log Out</button>
+  </div>
+</nav>
+
+<!-- Main Container -->
+<div class="dash-container" id="dashContent">
+
+  <div class="welcome-section">
+    <h1>Welcome back, <span id="welcomeName">User</span>.</h1>
+    <p>Here is your account overview for <span id="todayDate">today</span>.</p>
+  </div>
+
+  <!-- Stats -->
+  <div class="cards-grid">
+    <div class="stat-card">
+      <div class="stat-icon" style="background:#eef4fa;">&#128176;</div>
+      <div class="stat-label">Portfolio Value</div>
+      <div class="stat-value">$12,450.00</div>
+      <div class="stat-change up">&#9650; +$320.00 this month</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon" style="background:#e8f5e8;">&#128200;</div>
+      <div class="stat-label">Active Bonds</div>
+      <div class="stat-value">8</div>
+      <div class="stat-change up">&#9650; +2 this year</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon" style="background:#fdf8ee;">&#128179;</div>
+      <div class="stat-label">Pending Transactions</div>
+      <div class="stat-value">3</div>
+      <div class="stat-change">Processing</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon" style="background:#f0eef8;">&#128274;</div>
+      <div class="stat-label">Account Status</div>
+      <div class="stat-value" style="color:#1a7b3a;">Active</div>
+      <div class="stat-change up">&#10003; Verified</div>
+    </div>
+  </div>
+
+  <div class="dash-row">
+    <!-- Recent Activity -->
+    <div class="panel">
+      <h3>Recent Activity <span class="badge">Last 7 days</span></h3>
+      <ul class="activity-list">
+        <li class="activity-item">
+          <div class="a-icon buy">&#8593;</div>
+          <div class="a-info">
+            <div class="a-title">Series I Bond purchased — $500.00</div>
+            <div class="a-meta">Today at 9:42 AM &middot; Confirmed</div>
+          </div>
+        </li>
+        <li class="activity-item">
+          <div class="a-icon sell">&#8595;</div>
+          <div class="a-info">
+            <div class="a-title">EE Bond redeemed — $1,200.00</div>
+            <div class="a-meta">Yesterday &middot; Completed</div>
+          </div>
+        </li>
+        <li class="activity-item">
+          <div class="a-icon auth">&#9881;</div>
+          <div class="a-info">
+            <div class="a-title">Account settings updated</div>
+            <div class="a-meta">3 days ago &middot; Email notification changed</div>
+          </div>
+        </li>
+        <li class="activity-item">
+          <div class="a-icon buy">&#8593;</div>
+          <div class="a-info">
+            <div class="a-title">Recurring purchase scheduled</div>
+            <div class="a-meta">5 days ago &middot; $100 monthly into Series EE</div>
+          </div>
+        </li>
+        <li class="activity-item">
+          <div class="a-icon buy">&#8593;</div>
+          <div class="a-info">
+            <div class="a-title">Gift bond delivered — $50.00</div>
+            <div class="a-meta">6 days ago &middot; To beneficiary</div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Saved Items + Profile -->
+    <div>
+      <div class="panel" style="margin-bottom:1rem;">
+        <h3>Saved Items <span class="badge">4 items</span></h3>
+        <div class="saved-grid">
+          <div class="saved-item">
+            <div class="s-title">Series I Bond</div>
+            <div class="s-meta">4.26% &middot; Saved draft</div>
+          </div>
+          <div class="saved-item">
+            <div class="s-title">Treasury Bill</div>
+            <div class="s-meta">52-week &middot; Saved search</div>
+          </div>
+          <div class="saved-item">
+            <div class="s-title">Gift Calculator</div>
+            <div class="s-meta">$500 &middot; Recent calc</div>
+          </div>
+          <div class="saved-item">
+            <div class="s-title">Auction Alert</div>
+            <div class="s-meta">10-Year Note &middot; Set</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h3>Profile</h3>
+        <div class="profile-card">
+          <div class="p-avatar" id="profileAvatar">U</div>
+          <div class="p-info">
+            <div class="p-name" id="profileName">User Name</div>
+            <div class="p-email" id="profileEmail">user@example.com</div>
+          </div>
+          <button class="btn-settings" onclick="alert('Profile settings — demo mode.')">Settings</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // Check login state
+  function checkAuth() {
+    if (sessionStorage.getItem('demo_logged_in') !== 'true') {
+      document.getElementById('dashContent').innerHTML =
+        '<div class="logged-out-msg"><h2>Session expired</h2><p>Please <a href="/log-in/">log in</a> to view your dashboard.</p></div>';
+      return false;
+    }
+    return true;
+  }
+
+  function initDashboard() {
+    if (!checkAuth()) return;
+
+    const username = sessionStorage.getItem('demo_username') || 'User';
+    const displayName = username.charAt(0).toUpperCase() + username.slice(1);
+
+    document.getElementById('welcomeName').textContent = displayName;
+    document.getElementById('navUsername').textContent = displayName;
+    document.getElementById('navAvatar').textContent = displayName.charAt(0).toUpperCase();
+    document.getElementById('profileAvatar').textContent = displayName.charAt(0).toUpperCase();
+    document.getElementById('profileName').textContent = displayName;
+    document.getElementById('profileEmail').textContent = username + '@demo-platform.demo';
+
+    const now = new Date();
+    document.getElementById('todayDate').textContent = now.toLocaleDateString('en-US', {
+      weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+    });
+  }
+
+  function handleLogout() {
+    sessionStorage.removeItem('demo_logged_in');
+    sessionStorage.removeItem('demo_username');
+    window.location.href = '/log-in/';
+  }
+
+  initDashboard();
+</script>
+</body>
+</html>

@@ -1,0 +1,1418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Open a New Account — TreasuryDirect</title>
+  <link rel="icon" href="/images/favicon.svg" type="image/svg+xml">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      background: #f0f2f5;
+      color: #1a1a2e;
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+
+    /* Gov banner */
+    .gov-banner {
+      background: #0a2e5c;
+      color: #fff;
+      font-size: 0.7rem;
+      padding: 0.4rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .gov-banner .flag { width: 14px; height: auto; opacity: 0.85; }
+    .gov-banner span { opacity: 0.9; }
+
+    /* Main wrapper */
+    .onboarding-wrapper {
+      max-width: 760px;
+      margin: 1.5rem auto;
+      padding: 0 1rem;
+    }
+
+    /* Card container */
+    .onboarding-card {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06), 0 2px 8px rgba(0,0,0,0.04);
+      border: 1px solid #e0e5ea;
+      overflow: hidden;
+    }
+
+    /* Progress header */
+    .progress-header {
+      padding: 1.25rem 1.5rem 0.75rem;
+      border-bottom: 1px solid #eef1f5;
+    }
+    .progress-header .progress-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+    .progress-header .step-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #0a2e5c;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .progress-header .step-count {
+      font-size: 0.7rem;
+      color: #6b7a8a;
+    }
+    .progress-track {
+      width: 100%;
+      height: 4px;
+      background: #e0e5ea;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .progress-track .progress-fill {
+      height: 100%;
+      background: #0a2e5c;
+      border-radius: 4px;
+      transition: width 0.4s ease;
+    }
+
+    /* Step content */
+    .step-content { padding: 1.5rem; }
+    .step { display: none; }
+    .step.active { display: block; }
+
+    .step h2 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #0a2e5c;
+      margin-bottom: 0.25rem;
+    }
+    .step .subtitle {
+      font-size: 0.85rem;
+      color: #5a6a7a;
+      margin-bottom: 1.25rem;
+    }
+
+    /* Form fields */
+    .form-grid { display: flex; flex-direction: column; gap: 0.85rem; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem; }
+    .form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.85rem; }
+    .form-row-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 0.85rem; }
+    .form-group { display: flex; flex-direction: column; gap: 0.2rem; }
+    .form-group label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #3a4a5a;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+    .form-group label .optional { font-weight: 400; text-transform: none; color: #8a9aa8; font-size: 0.7rem; }
+    .form-group input,
+    .form-group select {
+      border: 1px solid #d0d7de;
+      border-radius: 6px;
+      padding: 0.65rem 0.75rem;
+      font-size: 0.9rem;
+      color: #1a2a3a;
+      background: #fff;
+      transition: border-color 0.15s, box-shadow 0.15s;
+      width: 100%;
+      font-family: inherit;
+    }
+    .form-group input:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: #0a2e5c;
+      box-shadow: 0 0 0 3px rgba(10,46,92,0.12);
+    }
+    .form-group input.error,
+    .form-group select.error {
+      border-color: #c0392b;
+      box-shadow: 0 0 0 3px rgba(192,57,43,0.1);
+    }
+    .form-group .error-msg {
+      font-size: 0.7rem;
+      color: #c0392b;
+      display: none;
+    }
+    .form-group .error-msg.visible { display: block; }
+    .form-group input:disabled { background: #f5f7f9; color: #8a9aa8; }
+
+    /* Info callout */
+    .info-callout {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.6rem;
+      background: #f0f4fa;
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      font-size: 0.8rem;
+      color: #2a4a6a;
+      border-left: 3px solid #0a2e5c;
+      margin-bottom: 0.85rem;
+    }
+    .info-callout .ico { flex-shrink: 0; margin-top: 0.05rem; }
+    .info-callout.warning { border-left-color: #b8860b; background: #fdf8ee; }
+    .info-callout.success { border-left-color: #1a7b3a; background: #f0f8f0; }
+
+    /* Checklist */
+    .checklist { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 0.15rem; }
+    .checklist li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+      padding: 0.3rem 0;
+      font-size: 0.85rem;
+      color: #2a3a4a;
+    }
+    .checklist li .check-icon {
+      flex-shrink: 0;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #eaf0ea;
+      color: #1a7b3a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.55rem;
+      margin-top: 0.2rem;
+    }
+
+    /* Account type cards */
+    .account-types { display: flex; flex-direction: column; gap: 0.5rem; }
+    .acct-card {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1rem;
+      border: 2px solid #e0e5ea;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .acct-card:hover { border-color: #b0c0d0; }
+    .acct-card.selected {
+      border-color: #0a2e5c;
+      background: #f0f4fa;
+    }
+    .acct-card .radio-dot {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 2px solid #d0d7de;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .acct-card.selected .radio-dot { border-color: #0a2e5c; }
+    .acct-card.selected .radio-dot::after {
+      content: '';
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: #0a2e5c;
+    }
+    .acct-card .acct-info { flex: 1; }
+    .acct-card .acct-name {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #1a2a3a;
+    }
+    .acct-card .acct-desc {
+      font-size: 0.78rem;
+      color: #6b7a8a;
+    }
+
+    /* Password rules */
+    .pw-rules {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.3rem;
+      margin: 0.3rem 0;
+    }
+    .pw-rules .rule {
+      font-size: 0.72rem;
+      color: #8a9aa8;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+    .pw-rules .rule.met { color: #1a7b3a; }
+
+    /* Security images */
+    .sec-images {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.5rem;
+      margin: 0.3rem 0;
+    }
+    .sec-images .img-opt {
+      aspect-ratio: 1;
+      border-radius: 6px;
+      border: 2px solid #e0e5ea;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+      background: #fafbfc;
+    }
+    .sec-images .img-opt:hover { border-color: #b0c0d0; }
+    .sec-images .img-opt.selected {
+      border-color: #0a2e5c;
+      background: #eef4fa;
+    }
+
+    /* Security questions */
+    .sec-q {
+      border: 1px solid #e0e5ea;
+      border-radius: 8px;
+      padding: 0.75rem;
+    }
+    .sec-q select { margin-bottom: 0.4rem; }
+
+    /* Buttons */
+    .btn-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 1.25rem;
+      gap: 0.75rem;
+    }
+    .btn-row.end { justify-content: flex-end; }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.65rem 1.5rem;
+      border-radius: 6px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      font-family: inherit;
+      transition: background 0.15s, opacity 0.15s;
+    }
+    .btn-primary {
+      background: #0a2e5c;
+      color: #fff;
+    }
+    .btn-primary:hover { background: #0f3d75; }
+    .btn-primary:disabled { opacity: 0.5; cursor: default; }
+    .btn-secondary {
+      background: transparent;
+      color: #4a5a6a;
+      border: 1px solid #d0d7de;
+    }
+    .btn-secondary:hover { background: #f5f7f9; }
+    .btn-success {
+      background: #1a7b3a;
+      color: #fff;
+    }
+    .btn-success:hover { background: #208f44; }
+    .btn-link {
+      background: none;
+      border: none;
+      color: #0a2e5c;
+      font-weight: 600;
+      font-size: 0.82rem;
+      cursor: pointer;
+      padding: 0.3rem 0;
+      text-decoration: underline;
+    }
+    .btn-link:hover { color: #0f3d75; }
+
+    /* Review */
+    .review-section { margin-bottom: 1rem; }
+    .review-section h3 {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #0a2e5c;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      margin-bottom: 0.4rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .review-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.3rem;
+    }
+    .review-item {
+      font-size: 0.82rem;
+      padding: 0.25rem 0;
+    }
+    .review-item .r-label {
+      font-weight: 600;
+      color: #4a5a6a;
+      font-size: 0.7rem;
+    }
+    .review-item .r-value { color: #1a2a3a; }
+
+    /* Processing */
+    .processing-view {
+      text-align: center;
+      padding: 2.5rem 1rem;
+    }
+    .spinner {
+      width: 48px;
+      height: 48px;
+      border: 4px solid #e0e5ea;
+      border-top-color: #0a2e5c;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 1rem;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .processing-view .status-text {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #0a2e5c;
+    }
+    .processing-view .status-sub {
+      font-size: 0.85rem;
+      color: #5a6a7a;
+      margin-top: 0.3rem;
+    }
+
+    /* Confirmation */
+    .confirmation {
+      text-align: center;
+      padding: 1rem 0;
+    }
+    .confirmation .check-big {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: #e8f5e8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 0.75rem;
+      font-size: 2rem;
+      color: #1a7b3a;
+    }
+    .confirmation h2 { color: #1a7b3a; }
+    .confirmation .ref-box {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: #f5f7f9;
+      border: 1px solid #e0e5ea;
+      border-radius: 6px;
+      padding: 0.5rem 1rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #0a2e5c;
+      margin: 0.5rem 0;
+    }
+
+    /* Utility */
+    .mt-0 { margin-top: 0; }
+    .mb-0 { margin-bottom: 0; }
+    .full { grid-column: 1 / -1; }
+    .text-center { text-align: center; }
+    .op-70 { opacity: 0.7; }
+
+    /* Hidden select styling */
+    select { appearance: auto; }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      .onboarding-wrapper { margin: 0.75rem auto; padding: 0 0.5rem; }
+      .step-content { padding: 1rem; }
+      .form-row { grid-template-columns: 1fr; }
+      .form-row-3 { grid-template-columns: 1fr 1fr; }
+      .form-row-4 { grid-template-columns: 1fr 1fr; }
+      .pw-rules { grid-template-columns: 1fr; }
+      .sec-images { grid-template-columns: repeat(3, 1fr); }
+      .review-grid { grid-template-columns: 1fr; }
+      .btn-row { flex-direction: column-reverse; }
+      .btn-row .btn { width: 100%; justify-content: center; }
+      .progress-header { padding: 1rem 1rem 0.5rem; }
+      .gov-banner { padding: 0.3rem 1rem; font-size: 0.65rem; }
+    }
+
+    @media (max-width: 400px) {
+      .sec-images { grid-template-columns: repeat(2, 1fr); }
+      .form-row-3 { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Gov banner -->
+<div class="gov-banner">
+  <span class="flag">&#9733;</span>
+  <span>An official website of the United States government</span>
+</div>
+
+<!-- Main wrapper -->
+<div class="onboarding-wrapper" id="app">
+
+  <div class="onboarding-card">
+
+    <!-- Progress header -->
+    <div class="progress-header" id="progressHeader">
+      <div class="progress-top">
+        <span class="step-label" id="stepLabel">Step 1 of 9</span>
+        <span class="step-count" id="stepTitle">Welcome</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="progressFill" style="width: 11%;"></div>
+      </div>
+    </div>
+
+    <!-- Step content -->
+    <div class="step-content">
+
+      <!-- ===== STEP 1: Welcome ===== -->
+      <div class="step active" id="step1">
+        <h2>Open a New Account</h2>
+        <p class="subtitle">Create an individual TreasuryDirect account to buy and manage U.S. Savings Bonds online.</p>
+
+        <div class="info-callout">
+          <span class="ico">&#9200;</span>
+          <div><strong>Estimated time:</strong> About 10 minutes to complete this application.</div>
+        </div>
+
+        <p style="font-size:0.85rem;font-weight:600;color:#2a3a4a;margin-bottom:0.5rem;">Before you start, make sure you have:</p>
+        <ul class="checklist">
+          <li><span class="check-icon">&#10003;</span> Taxpayer Identification Number / Social Security Number</li>
+          <li><span class="check-icon">&#10003;</span> U.S. address of record</li>
+          <li><span class="check-icon">&#10003;</span> Checking or savings bank account</li>
+          <li><span class="check-icon">&#10003;</span> Bank routing number</li>
+          <li><span class="check-icon">&#10003;</span> Bank account number</li>
+          <li><span class="check-icon">&#10003;</span> Valid email address</li>
+          <li><span class="check-icon">&#10003;</span> Phone number</li>
+          <li><span class="check-icon">&#10003;</span> Browser / device with 128-bit encryption</li>
+        </ul>
+
+        <div class="btn-row">
+          <button class="btn btn-secondary" onclick="cancelFlow()">Cancel</button>
+          <button class="btn btn-primary" onclick="goToStep(2)">Start Application &rarr;</button>
+        </div>
+      </div>
+
+      <!-- ===== STEP 2: Account Type ===== -->
+      <div class="step" id="step2">
+        <h2>Choose Account Type</h2>
+        <p class="subtitle">Select the type of account you want to open.</p>
+
+        <div class="account-types">
+          <div class="acct-card selected" data-value="Individual" onclick="selectAccountType(this)">
+            <div class="radio-dot"></div>
+            <div class="acct-info">
+              <div class="acct-name">Individual Account</div>
+              <div class="acct-desc">A single owner with full rights to manage bonds, buy, and redeem.</div>
+            </div>
+          </div>
+          <div class="acct-card" data-value="Minor" onclick="selectAccountType(this)">
+            <div class="radio-dot"></div>
+            <div class="acct-info">
+              <div class="acct-name">Minor Account <span style="font-weight:400;font-size:0.75rem;color:#8a9aa8;">(Custodial)</span></div>
+              <div class="acct-desc">For a child under 18. Managed by a custodian until the minor comes of age.</div>
+            </div>
+          </div>
+          <div class="acct-card" data-value="Entity" onclick="selectAccountType(this)">
+            <div class="radio-dot"></div>
+            <div class="acct-info">
+              <div class="acct-name">Entity Account</div>
+              <div class="acct-desc">For corporations, partnerships, estates, trusts, and other legal entities.</div>
+            </div>
+          </div>
+          <div class="acct-card" data-value="Trust" onclick="selectAccountType(this)">
+            <div class="radio-dot"></div>
+            <div class="acct-info">
+              <div class="acct-name">Trust Account</div>
+              <div class="acct-desc">For revocable and irrevocable trusts with a valid trust agreement.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn btn-secondary" onclick="goToStep(1)">&larr; Back</button>
+          <button class="btn btn-primary" onclick="goToStep(3)">Continue &rarr;</button>
+        </div>
+      </div>
+
+      <!-- ===== STEP 3: Personal Information ===== -->
+      <div class="step" id="step3">
+        <h2>Personal Information</h2>
+        <p class="subtitle">Enter your personal details as they appear on government records.</p>
+
+        <div class="info-callout warning">
+          <span class="ico">&#128274;</span>
+          <div><strong>Demo notice:</strong> Do not enter real SSN or real personal data. Use placeholder values only.</div>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="firstName">First Name <span style="color:#c0392b;">*</span></label>
+              <input type="text" id="firstName" placeholder="e.g. Alex" value="Alex" autocomplete="off">
+              <div class="error-msg" id="firstNameErr">First name is required.</div>
+            </div>
+            <div class="form-group">
+              <label for="middleName">Middle Name <span class="optional">(optional)</span></label>
+              <input type="text" id="middleName" placeholder="e.g. James" value="James" autocomplete="off">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="lastName">Last Name <span style="color:#c0392b;">*</span></label>
+            <input type="text" id="lastName" placeholder="e.g. Johnson" value="Johnson" autocomplete="off">
+            <div class="error-msg" id="lastNameErr">Last name is required.</div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="dob">Date of Birth <span style="color:#c0392b;">*</span></label>
+              <input type="date" id="dob" value="1988-06-15">
+              <div class="error-msg" id="dobErr">You must be 18 or older.</div>
+            </div>
+            <div class="form-group">
+              <label for="ssn">Taxpayer ID / SSN <span style="color:#c0392b;">*</span></label>
+              <input type="password" id="ssn" placeholder="XXX-XX-1234" maxlength="11" value="123-45-6789" autocomplete="off">
+              <div class="error-msg" id="ssnErr">SSN is required (9 digits).</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="ssnConfirm">Confirm SSN <span style="color:#c0392b;">*</span></label>
+            <input type="password" id="ssnConfirm" placeholder="Re-enter SSN" maxlength="11" value="123-45-6789" autocomplete="off">
+            <div class="error-msg" id="ssnConfirmErr">SSN values must match.</div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="phone">Phone Number <span style="color:#c0392b;">*</span></label>
+              <input type="tel" id="phone" placeholder="(555) 123-4567" value="(555) 123-4567" autocomplete="off">
+              <div class="error-msg" id="phoneErr">Phone number is required.</div>
+            </div>
+            <div class="form-group">
+              <label for="email">Email Address <span style="color:#c0392b;">*</span></label>
+              <input type="email" id="email" placeholder="you@example.com" value="alex.johnson@example.com" autocomplete="off">
+              <div class="error-msg" id="emailErr">Valid email is required.</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="emailConfirm">Confirm Email Address <span style="color:#c0392b;">*</span></label>
+            <input type="email" id="emailConfirm" placeholder="Re-enter email" value="alex.johnson@example.com" autocomplete="off">
+            <div class="error-msg" id="emailConfirmErr">Email values must match.</div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="driversLicense">Driver's License / State ID Number <span style="color:#c0392b;">*</span></label>
+              <input type="text" id="driversLicense" placeholder="e.g. IL-DL-XXXX" value="IL-DL-1234-ABCD" autocomplete="off">
+              <div class="error-msg" id="dlErr">License or state ID is required.</div>
+            </div>
+            <div class="form-group">
+              <label for="dlState">Issuing State <span style="color:#c0392b;">*</span></label>
+              <select id="dlState">
+                <option value="">Select state</option>
+                <option value="AL">Alabama</option><option value="AK">Alaska</option><option value="AZ">Arizona</option>
+                <option value="AR">Arkansas</option><option value="CA">California</option><option value="CO">Colorado</option>
+                <option value="CT">Connecticut</option><option value="DE">Delaware</option><option value="FL">Florida</option>
+                <option value="GA">Georgia</option><option value="HI">Hawaii</option><option value="ID">Idaho</option>
+                <option value="IL" selected>Illinois</option><option value="IN">Indiana</option><option value="IA">Iowa</option>
+                <option value="KS">Kansas</option><option value="KY">Kentucky</option><option value="LA">Louisiana</option>
+                <option value="ME">Maine</option><option value="MD">Maryland</option><option value="MA">Massachusetts</option>
+                <option value="MI">Michigan</option><option value="MN">Minnesota</option><option value="MS">Mississippi</option>
+                <option value="MO">Missouri</option><option value="MT">Montana</option><option value="NE">Nebraska</option>
+                <option value="NV">Nevada</option><option value="NH">New Hampshire</option><option value="NJ">New Jersey</option>
+                <option value="NM">New Mexico</option><option value="NY">New York</option><option value="NC">North Carolina</option>
+                <option value="ND">North Dakota</option><option value="OH">Ohio</option><option value="OK">Oklahoma</option>
+                <option value="OR">Oregon</option><option value="PA">Pennsylvania</option><option value="RI">Rhode Island</option>
+                <option value="SC">South Carolina</option><option value="SD">South Dakota</option><option value="TN">Tennessee</option>
+                <option value="TX">Texas</option><option value="UT">Utah</option><option value="VT">Vermont</option>
+                <option value="VA">Virginia</option><option value="WA">Washington</option><option value="WV">West Virginia</option>
+                <option value="WI">Wisconsin</option><option value="WY">Wyoming</option>
+              </select>
+              <div class="error-msg" id="dlStateErr">Issuing state is required.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn btn-secondary" onclick="goToStep(2)">&larr; Back</button>
+          <button class="btn btn-primary" onclick="validateStep3()">Continue &rarr;</button>
+        </div>
+      </div>
+
+      <!-- ===== STEP 4: Address ===== -->
+      <div class="step" id="step4">
+        <h2>Address of Record</h2>
+        <p class="subtitle">This address is used for identity verification and account records.</p>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="street">Street Address <span style="color:#c0392b;">*</span></label>
+            <input type="text" id="street" placeholder="123 Main Street" value="742 Evergreen Terrace" autocomplete="off">
+            <div class="error-msg" id="streetErr">Street address is required.</div>
+          </div>
+          <div class="form-group">
+            <label for="apt">Apartment / Unit <span class="optional">(optional)</span></label>
+            <input type="text" id="apt" placeholder="Apt 4B" value="Suite 200" autocomplete="off">
+          </div>
+          <div class="form-row-3">
+            <div class="form-group">
+              <label for="city">City <span style="color:#c0392b;">*</span></label>
+              <input type="text" id="city" placeholder="City" value="Springfield" autocomplete="off">
+              <div class="error-msg" id="cityErr">City is required.</div>
+            </div>
+            <div class="form-group">
+              <label for="state">State <span style="color:#c0392b;">*</span></label>
+              <select id="state">
+                <option value="">Select state</option>
+                <option value="AL">Alabama</option><option value="AK">Alaska</option><option value="AZ">Arizona</option>
+                <option value="AR">Arkansas</option><option value="CA">California</option><option value="CO">Colorado</option>
+                <option value="CT">Connecticut</option><option value="DE">Delaware</option><option value="FL">Florida</option>
+                <option value="GA">Georgia</option><option value="HI">Hawaii</option><option value="ID">Idaho</option>
+                <option value="IL" selected>Illinois</option><option value="IN">Indiana</option><option value="IA">Iowa</option>
+                <option value="KS">Kansas</option><option value="KY">Kentucky</option><option value="LA">Louisiana</option>
+                <option value="ME">Maine</option><option value="MD">Maryland</option><option value="MA">Massachusetts</option>
+                <option value="MI">Michigan</option><option value="MN">Minnesota</option><option value="MS">Mississippi</option>
+                <option value="MO">Missouri</option><option value="MT">Montana</option><option value="NE">Nebraska</option>
+                <option value="NV">Nevada</option><option value="NH">New Hampshire</option><option value="NJ">New Jersey</option>
+                <option value="NM">New Mexico</option><option value="NY">New York</option><option value="NC">North Carolina</option>
+                <option value="ND">North Dakota</option><option value="OH">Ohio</option><option value="OK">Oklahoma</option>
+                <option value="OR">Oregon</option><option value="PA">Pennsylvania</option><option value="RI">Rhode Island</option>
+                <option value="SC">South Carolina</option><option value="SD">South Dakota</option><option value="TN">Tennessee</option>
+                <option value="TX">Texas</option><option value="UT">Utah</option><option value="VT">Vermont</option>
+                <option value="VA">Virginia</option><option value="WA">Washington</option><option value="WV">West Virginia</option>
+                <option value="WI">Wisconsin</option><option value="WY">Wyoming</option>
+              </select>
+              <div class="error-msg" id="stateErr">State is required.</div>
+            </div>
+            <div class="form-group">
+              <label for="zip">ZIP Code <span style="color:#c0392b;">*</span></label>
+              <input type="text" id="zip" placeholder="12345" maxlength="10" value="62701" autocomplete="off">
+              <div class="error-msg" id="zipErr">Valid ZIP code is required.</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="country">Country</label>
+            <input type="text" id="country" value="United States" disabled>
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn btn-secondary" onclick="goToStep(3)">&larr; Back</button>
+          <button class="btn btn-primary" onclick="validateStep4()">Continue &rarr;</button>
+        </div>
+      </div>
+
+      <!-- ===== STEP 5: Bank Information ===== -->
+      <div class="step" id="step5">
+        <h2>Bank Information</h2>
+        <p class="subtitle">This bank account will be used for TreasuryDirect purchases and redemptions.</p>
+
+        <div class="info-callout warning">
+          <span class="ico">&#9888;</span>
+          <div><strong>For this demo, do not enter real bank information.</strong> Use the provided placeholder values.</div>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Account Type <span style="color:#c0392b;">*</span></label>
+            <div style="display:flex;gap:0.75rem;">
+              <label style="display:flex;align-items:center;gap:0.4rem;font-size:0.88rem;cursor:pointer;">
+                <input type="radio" name="acctType" value="Checking" checked onchange="onFieldChange()"> Checking
+              </label>
+              <label style="display:flex;align-items:center;gap:0.4rem;font-size:0.88rem;cursor:pointer;">
+                <input type="radio" name="acctType" value="Savings" onchange="onFieldChange()"> Savings
+              </label>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="routing">Bank Routing Number <span style="color:#c0392b;">*</span></label>
+              <input type="text" id="routing" placeholder="9-digit routing number" maxlength="9" value="021000021" autocomplete="off">
+              <div class="error-msg" id="routingErr">Valid routing number is required (9 digits).</div>
+            </div>
+            <div class="form-group">
+              <label for="routingConfirm">Confirm Routing Number <span style="color:#c0392b;">*</span></label>
+              <input type="text" id="routingConfirm" placeholder="Re-enter routing number" maxlength="9" value="021000021" autocomplete="off">
+              <div class="error-msg" id="routingConfirmErr">Routing numbers must match.</div>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="accountNum">Bank Account Number <span style="color:#c0392b;">*</span></label>
+              <input type="password" id="accountNum" placeholder="Account number" value="1234567890" autocomplete="off">
+              <div class="error-msg" id="acctNumErr">Account number is required.</div>
+            </div>
+            <div class="form-group">
+              <label for="accountNumConfirm">Confirm Account Number <span style="color:#c0392b;">*</span></label>
+              <input type="password" id="accountNumConfirm" placeholder="Re-enter account number" value="1234567890" autocomplete="off">
+              <div class="error-msg" id="acctNumConfirmErr">Account numbers must match.</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="bankName">Bank Name <span class="optional">(optional)</span></label>
+            <input type="text" id="bankName" placeholder="e.g. First National Bank" value="First National Bank" autocomplete="off">
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn btn-secondary" onclick="goToStep(4)">&larr; Back</button>
+          <button class="btn btn-primary" onclick="validateStep5()">Continue &rarr;</button>
+        </div>
+      </div>
+
+      <!-- ===== STEP 6: Security Setup ===== -->
+      <div class="step" id="step6">
+        <h2>Account Security</h2>
+        <p class="subtitle">Set up your account credentials and security features.</p>
+
+        <div class="form-grid">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="password">Create Password <span style="color:#c0392b;">*</span></label>
+              <input type="password" id="password" placeholder="Create a strong password" value="DemoP@ss123" autocomplete="off">
+              <div class="error-msg" id="passwordErr">Password does not meet requirements.</div>
+            </div>
+            <div class="form-group">
+              <label for="passwordConfirm">Confirm Password <span style="color:#c0392b;">*</span></label>
+              <input type="password" id="passwordConfirm" placeholder="Re-enter password" value="DemoP@ss123" autocomplete="off">
+              <div class="error-msg" id="passwordConfirmErr">Passwords must match.</div>
+            </div>
+          </div>
+          <div class="pw-rules" id="pwRules">
+            <span class="rule" id="pwLen">&#9633; At least 8 characters</span>
+            <span class="rule" id="pwUpper">&#9633; At least 1 uppercase letter</span>
+            <span class="rule" id="pwLower">&#9633; At least 1 lowercase letter</span>
+            <span class="rule" id="pwDigit">&#9633; At least 1 number</span>
+            <span class="rule" id="pwSpecial">&#9633; At least 1 special character</span>
+            <span class="rule" id="pwMatch">&#9633; Passwords match</span>
+          </div>
+
+          <div class="form-group">
+            <label for="passwordReminder">Password Reminder Phrase <span style="color:#c0392b;">*</span></label>
+            <input type="text" id="passwordReminder" placeholder="e.g. My first pet plus birth year" value="My first pet plus birth year" autocomplete="off">
+            <div class="error-msg" id="reminderErr">Password reminder is required.</div>
+          </div>
+
+          <div class="form-group">
+            <label>Select Personalised Security Image <span style="color:#c0392b;">*</span></label>
+            <div class="sec-images" id="secImages">
+              <div class="img-opt selected" data-icon="&#127775;" onclick="selectSecImage(this)">&#127775;</div>
+              <div class="img-opt" data-icon="&#128153;" onclick="selectSecImage(this)">&#128153;</div>
+              <div class="img-opt" data-icon="&#127754;" onclick="selectSecImage(this)">&#127754;</div>
+              <div class="img-opt" data-icon="&#127800;" onclick="selectSecImage(this)">&#127800;</div>
+              <div class="img-opt" data-icon="&#127752;" onclick="selectSecImage(this)">&#127752;</div>
+              <div class="img-opt" data-icon="&#127794;" onclick="selectSecImage(this)">&#127794;</div>
+              <div class="img-opt" data-icon="&#128150;" onclick="selectSecImage(this)">&#128150;</div>
+              <div class="img-opt" data-icon="&#127775;" onclick="selectSecImage(this)">&#127775;</div>
+              <div class="img-opt" data-icon="&#128009;" onclick="selectSecImage(this)">&#128009;</div>
+              <div class="img-opt" data-icon="&#127769;" onclick="selectSecImage(this)">&#127769;</div>
+              <div class="img-opt" data-icon="&#127757;" onclick="selectSecImage(this)">&#127757;</div>
+              <div class="img-opt" data-icon="&#127822;" onclick="selectSecImage(this)">&#127822;</div>
+            </div>
+            <div class="error-msg" id="secImageErr">Please select a security image.</div>
+          </div>
+
+          <div class="form-group">
+            <label for="imageCaption">Custom Image Caption <span style="color:#c0392b;">*</span></label>
+            <input type="text" id="imageCaption" placeholder="e.g. My secure image" value="My secure image" autocomplete="off">
+            <div class="error-msg" id="captionErr">Caption is required.</div>
+          </div>
+
+          <div class="sec-q">
+            <div class="form-group">
+              <label>Security Question 1 <span style="color:#c0392b;">*</span></label>
+              <select id="secQ1">
+                <option value="">Select a question</option>
+                <option value="What was your childhood nickname?" selected>What was your childhood nickname?</option>
+                <option value="What is the name of your first pet?">What is the name of your first pet?</option>
+                <option value="What street did you grow up on?">What street did you grow up on?</option>
+                <option value="What was the name of your first school?">What was the name of your first school?</option>
+                <option value="What is your mother's maiden name?">What is your mother's maiden name?</option>
+                <option value="What was the make of your first car?">What was the make of your first car?</option>
+              </select>
+              <div class="error-msg" id="secQ1Err">Please select a question.</div>
+            </div>
+            <div class="form-group">
+              <label>Answer <span style="color:#c0392b;">*</span></label>
+              <input type="text" id="secA1" placeholder="Your answer" value="Sammy" autocomplete="off">
+              <div class="error-msg" id="secA1Err">Answer is required.</div>
+            </div>
+          </div>
+
+          <div class="sec-q">
+            <div class="form-group">
+              <label>Security Question 2 <span style="color:#c0392b;">*</span></label>
+              <select id="secQ2">
+                <option value="">Select a question</option>
+                <option value="What was your childhood nickname?">What was your childhood nickname?</option>
+                <option value="What is the name of your first pet?">What is the name of your first pet?</option>
+                <option value="What street did you grow up on?" selected>What street did you grow up on?</option>
+                <option value="What was the name of your first school?">What was the name of your first school?</option>
+                <option value="What is your mother's maiden name?">What is your mother's maiden name?</option>
+                <option value="What was the make of your first car?">What was the make of your first car?</option>
+              </select>
+              <div class="error-msg" id="secQ2Err">Please select a question.</div>
+            </div>
+            <div class="form-group">
+              <label>Answer <span style="color:#c0392b;">*</span></label>
+              <input type="text" id="secA2" placeholder="Your answer" value="Oak Street" autocomplete="off">
+              <div class="error-msg" id="secA2Err">Answer is required.</div>
+            </div>
+          </div>
+
+          <div class="sec-q">
+            <div class="form-group">
+              <label>Security Question 3 <span style="color:#c0392b;">*</span></label>
+              <select id="secQ3">
+                <option value="">Select a question</option>
+                <option value="What was your childhood nickname?">What was your childhood nickname?</option>
+                <option value="What is the name of your first pet?" selected>What is the name of your first pet?</option>
+                <option value="What street did you grow up on?">What street did you grow up on?</option>
+                <option value="What was the name of your first school?">What was the name of your first school?</option>
+                <option value="What is your mother's maiden name?">What is your mother's maiden name?</option>
+                <option value="What was the make of your first car?">What was the make of your first car?</option>
+              </select>
+              <div class="error-msg" id="secQ3Err">Please select a question.</div>
+            </div>
+            <div class="form-group">
+              <label>Answer <span style="color:#c0392b;">*</span></label>
+              <input type="text" id="secA3" placeholder="Your answer" value="Max" autocomplete="off">
+              <div class="error-msg" id="secA3Err">Answer is required.</div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="btn-row">
+          <button class="btn btn-secondary" onclick="goToStep(5)">&larr; Back</button>
+          <button class="btn btn-primary" onclick="validateStep6()">Continue &rarr;</button>
+        </div>
+      </div>
+
+      <!-- ===== STEP 7: Review ===== -->
+      <div class="step" id="step7">
+        <h2>Review Your Information</h2>
+        <p class="subtitle">Please review all details before submitting. You can edit any section.</p>
+
+        <div id="reviewContent"></div>
+
+        <div class="info-callout success" style="margin-top:0.75rem;">
+          <span class="ico">&#10003;</span>
+          <div>
+            <label style="display:flex;align-items:flex-start;gap:0.5rem;cursor:pointer;font-size:0.85rem;">
+              <input type="checkbox" id="confirmCheck" onchange="toggleSubmit()">
+              <span>I confirm that this information is accurate and I understand this is a demo flow. No real data will be submitted.</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn btn-secondary" onclick="goToStep(6)">&larr; Back</button>
+          <button class="btn btn-success" id="submitBtn" onclick="submitApplication()" disabled>Submit Application &rarr;</button>
+        </div>
+      </div>
+
+      <!-- ===== STEP 8: Processing ===== -->
+      <div class="step" id="step8">
+        <div class="processing-view">
+          <div class="spinner"></div>
+          <div class="status-text">Verifying your information…</div>
+          <div class="status-sub">Please wait while we process your application.</div>
+        </div>
+      </div>
+
+      <!-- ===== STEP 9: Confirmation ===== -->
+      <div class="step" id="step9">
+        <div class="confirmation">
+          <div class="check-big">&#10004;</div>
+          <h2>Application Submitted</h2>
+          <p style="color:#4a5a6a;font-size:0.9rem;max-width:480px;margin:0.25rem auto 0.75rem;">
+            Your account application has been received by TreasuryDirect.
+          </p>
+
+          <div class="ref-box">
+            <span>Application Reference:</span>
+            <span id="refNumber">TD-2026-XXXX-XXXX</span>
+          </div>
+          <div style="font-size:0.8rem;color:#6b7a8a;margin-bottom:0.75rem;">
+            Submitted: <span id="submittedDate">June 19, 2026</span>
+          </div>
+
+          <div style="background:#f0f8f0;border-radius:8px;padding:0.75rem 1rem;font-size:0.82rem;color:#1a4a2a;text-align:left;max-width:520px;margin:0 auto;">
+            <strong>What happens next:</strong>
+            <ul style="margin-top:0.3rem;padding-left:1.2rem;">
+              <li>TreasuryDirect verifies your information against government records.</li>
+              <li>If verification succeeds, your account is created and you receive your account details.</li>
+              <li>If verification cannot be completed, you may need to complete a printable authentication form for additional identity verification.</li>
+            </ul>
+          </div>
+
+          <div class="btn-row" style="justify-content:center;flex-wrap:wrap;">
+            <button class="btn btn-primary" onclick="goToDashboard()">Go to Dashboard</button>
+            <button class="btn btn-secondary" onclick="printSummary()">Print Summary</button>
+            <button class="btn btn-secondary" onclick="returnHome()">Return Home</button>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /step-content -->
+  </div><!-- /onboarding-card -->
+</div><!-- /onboarding-wrapper -->
+
+<script>
+// ======= STATE =======
+const state = {
+  currentStep: 1,
+  totalSteps: 9,
+  accountType: 'Individual',
+  // step 3
+  firstName: 'Alex',
+  middleName: 'James',
+  lastName: 'Johnson',
+  dob: '1988-06-15',
+  ssn: '123-45-6789',
+  ssnConfirm: '123-45-6789',
+  phone: '(555) 123-4567',
+  email: 'alex.johnson@example.com',
+  emailConfirm: 'alex.johnson@example.com',
+  driversLicense: 'IL-DL-1234-ABCD',
+  dlState: 'IL',
+  // step 4
+  street: '742 Evergreen Terrace',
+  apt: 'Suite 200',
+  city: 'Springfield',
+  stateAddr: 'IL',
+  zip: '62701',
+  country: 'United States',
+  // step 5
+  acctType: 'Checking',
+  routing: '021000021',
+  routingConfirm: '021000021',
+  accountNum: '1234567890',
+  accountNumConfirm: '1234567890',
+  bankName: 'First National Bank',
+  // step 6
+  password: 'DemoP@ss123',
+  passwordConfirm: 'DemoP@ss123',
+  passwordReminder: 'My first pet plus birth year',
+  secImage: '&#127775;',
+  imageCaption: 'My secure image',
+  secQ1: 'What was your childhood nickname?',
+  secA1: 'Sammy',
+  secQ2: 'What street did you grow up on?',
+  secA2: 'Oak Street',
+  secQ3: 'What is the name of your first pet?',
+  secA3: 'Max'
+};
+
+// ======= NAVIGATION =======
+function goToStep(n) {
+  // Save current step data
+  saveCurrentStep();
+
+  document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+  document.getElementById('step' + n).classList.add('active');
+  state.currentStep = n;
+
+  const pct = Math.round((n / state.totalSteps) * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('stepLabel').textContent = 'Step ' + n + ' of ' + state.totalSteps;
+
+  const titles = ['', 'Welcome', 'Account Type', 'Personal Information', 'Address of Record',
+    'Bank Information', 'Account Security', 'Review Application', 'Processing', 'Confirmation'];
+  document.getElementById('stepTitle').textContent = titles[n];
+
+  // Hide progress on step 8 (processing)
+  document.getElementById('progressHeader').style.display = (n === 8) ? 'none' : 'block';
+
+  if (n === 7) buildReview();
+  if (n === 8) {
+    setTimeout(() => {
+      const ref = 'TD-2026-' + String(Math.floor(1000 + Math.random() * 9000)) + '-' + String(Math.floor(1000 + Math.random() * 9000));
+      document.getElementById('refNumber').textContent = ref;
+      document.getElementById('submittedDate').textContent = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+      goToStep(9);
+    }, 2500);
+  }
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function saveCurrentStep() {
+  const s = state;
+  // step 2
+  s.accountType = document.querySelector('.acct-card.selected')?.dataset?.value || 'Individual';
+  // step 3
+  s.firstName = g('firstName');
+  s.middleName = g('middleName');
+  s.lastName = g('lastName');
+  s.dob = g('dob');
+  s.ssn = g('ssn');
+  s.ssnConfirm = g('ssnConfirm');
+  s.phone = g('phone');
+  s.email = g('email');
+  s.emailConfirm = g('emailConfirm');
+  s.driversLicense = g('driversLicense');
+  s.dlState = g('dlState');
+  // step 4
+  s.street = g('street');
+  s.apt = g('apt');
+  s.city = g('city');
+  s.stateAddr = g('state');
+  s.zip = g('zip');
+  // step 5
+  const acctRadios = document.getElementsByName('acctType');
+  for (const r of acctRadios) { if (r.checked) s.acctType = r.value; }
+  s.routing = g('routing');
+  s.routingConfirm = g('routingConfirm');
+  s.accountNum = g('accountNum');
+  s.accountNumConfirm = g('accountNumConfirm');
+  s.bankName = g('bankName');
+  // step 6
+  s.password = g('password');
+  s.passwordConfirm = g('passwordConfirm');
+  s.passwordReminder = g('passwordReminder');
+  s.imageCaption = g('imageCaption');
+  s.secQ1 = g('secQ1');
+  s.secA1 = g('secA1');
+  s.secQ2 = g('secQ2');
+  s.secA2 = g('secA2');
+  s.secQ3 = g('secQ3');
+  s.secA3 = g('secA3');
+}
+
+function g(id) { const el = document.getElementById(id); return el ? el.value : ''; }
+
+// ======= ACCOUNT TYPE =======
+function selectAccountType(el) {
+  document.querySelectorAll('.acct-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  state.accountType = el.dataset.value;
+}
+
+// ======= SECURITY IMAGE =======
+function selectSecImage(el) {
+  document.querySelectorAll('.sec-images .img-opt').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  state.secImage = el.dataset.icon;
+}
+
+// ======= VALIDATION =======
+function clearErrors() {
+  document.querySelectorAll('.error-msg.visible').forEach(e => e.classList.remove('visible'));
+  document.querySelectorAll('input.error, select.error').forEach(e => e.classList.remove('error'));
+}
+
+function showError(id) {
+  const el = document.getElementById(id);
+  if (el) el.classList.add('visible');
+}
+
+function markError(inputId) {
+  const el = document.getElementById(inputId);
+  if (el) el.classList.add('error');
+}
+
+function validateStep3() {
+  clearErrors();
+  let ok = true;
+  const s = state;
+  saveCurrentStep();
+
+  if (!s.firstName.trim()) { showError('firstNameErr'); markError('firstName'); ok = false; }
+  if (!s.lastName.trim()) { showError('lastNameErr'); markError('lastName'); ok = false; }
+
+  // DOB - must be 18+
+  if (!s.dob) { showError('dobErr'); markError('dob'); ok = false; }
+  else {
+    const birth = new Date(s.dob);
+    const today = new Date();
+    let age = today.getFullYear() - birth.getFullYear();
+    const m = today.getMonth() - birth.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) age--;
+    if (age < 18) { showError('dobErr'); markError('dob'); ok = false; }
+  }
+
+  // SSN
+  const ssnClean = s.ssn.replace(/\D/g, '');
+  if (ssnClean.length !== 9) { showError('ssnErr'); markError('ssn'); ok = false; }
+  const ssnConfirmClean = s.ssnConfirm.replace(/\D/g, '');
+  if (ssnClean !== ssnConfirmClean) { showError('ssnConfirmErr'); markError('ssnConfirm'); ok = false; }
+
+  // Phone
+  if (!s.phone.trim()) { showError('phoneErr'); markError('phone'); ok = false; }
+
+  // Email
+  const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRe.test(s.email)) { showError('emailErr'); markError('email'); ok = false; }
+  if (s.email !== s.emailConfirm) { showError('emailConfirmErr'); markError('emailConfirm'); ok = false; }
+
+  // DL
+  if (!s.driversLicense.trim()) { showError('dlErr'); markError('driversLicense'); ok = false; }
+  if (!s.dlState) { showError('dlStateErr'); markError('dlState'); ok = false; }
+
+  if (ok) goToStep(4);
+}
+
+function validateStep4() {
+  clearErrors();
+  let ok = true;
+  saveCurrentStep();
+  const s = state;
+
+  if (!s.street.trim()) { showError('streetErr'); markError('street'); ok = false; }
+  if (!s.city.trim()) { showError('cityErr'); markError('city'); ok = false; }
+  if (!s.stateAddr) { showError('stateErr'); markError('state'); ok = false; }
+  if (!s.zip.trim() || s.zip.trim().length < 5) { showError('zipErr'); markError('zip'); ok = false; }
+
+  if (ok) goToStep(5);
+}
+
+function validateStep5() {
+  clearErrors();
+  let ok = true;
+  saveCurrentStep();
+  const s = state;
+
+  const routingClean = s.routing.replace(/\D/g, '');
+  if (routingClean.length !== 9) { showError('routingErr'); markError('routing'); ok = false; }
+  const routingConfirmClean = s.routingConfirm.replace(/\D/g, '');
+  if (routingClean !== routingConfirmClean) { showError('routingConfirmErr'); markError('routingConfirm'); ok = false; }
+
+  if (!s.accountNum.trim()) { showError('acctNumErr'); markError('accountNum'); ok = false; }
+  if (s.accountNum.trim() !== s.accountNumConfirm.trim()) { showError('acctNumConfirmErr'); markError('accountNumConfirm'); ok = false; }
+
+  if (ok) goToStep(6);
+}
+
+function validateStep6() {
+  clearErrors();
+  let ok = true;
+  saveCurrentStep();
+  const s = state;
+
+  // Password rules
+  const pw = s.password;
+  const pwRules = [
+    { id: 'pwLen', test: pw.length >= 8 },
+    { id: 'pwUpper', test: /[A-Z]/.test(pw) },
+    { id: 'pwLower', test: /[a-z]/.test(pw) },
+    { id: 'pwDigit', test: /\d/.test(pw) },
+    { id: 'pwSpecial', test: /[^A-Za-z0-9]/.test(pw) },
+    { id: 'pwMatch', test: pw === s.passwordConfirm }
+  ];
+  let allMet = true;
+  pwRules.forEach(r => {
+    const el = document.getElementById(r.id);
+    if (r.test) { el.classList.add('met'); el.innerHTML = '&#9632; ' + el.textContent.trim().substring(1); }
+    else { el.classList.remove('met'); allMet = false; }
+  });
+  if (!allMet) { showError('passwordErr'); markError('password'); ok = false; }
+
+  if (pw !== s.passwordConfirm) { showError('passwordConfirmErr'); markError('passwordConfirm'); ok = false; }
+
+  if (!s.passwordReminder.trim()) { showError('reminderErr'); markError('passwordReminder'); ok = false; }
+
+  // Security image
+  const selectedImg = document.querySelector('.sec-images .img-opt.selected');
+  if (!selectedImg) { showError('secImageErr'); ok = false; }
+
+  if (!s.imageCaption.trim()) { showError('captionErr'); markError('imageCaption'); ok = false; }
+
+  // Security questions
+  if (!s.secQ1) { showError('secQ1Err'); markError('secQ1'); ok = false; }
+  if (!s.secA1.trim()) { showError('secA1Err'); markError('secA1'); ok = false; }
+  if (!s.secQ2) { showError('secQ2Err'); markError('secQ2'); ok = false; }
+  if (!s.secA2.trim()) { showError('secA2Err'); markError('secA2'); ok = false; }
+  if (!s.secQ3) { showError('secQ3Err'); markError('secQ3'); ok = false; }
+  if (!s.secA3.trim()) { showError('secA3Err'); markError('secA3'); ok = false; }
+
+  // Questions must be different
+  if (s.secQ1 && s.secQ2 && s.secQ1 === s.secQ2) {
+    showError('secQ2Err'); markError('secQ2'); ok = false;
+  }
+  if (s.secQ1 && s.secQ3 && s.secQ1 === s.secQ3) {
+    showError('secQ3Err'); markError('secQ3'); ok = false;
+  }
+  if (s.secQ2 && s.secQ3 && s.secQ2 === s.secQ3) {
+    showError('secQ3Err'); markError('secQ3'); ok = false;
+  }
+
+  if (ok) goToStep(7);
+}
+
+// ======= PASSWORD RULES (live) =======
+document.addEventListener('input', function(e) {
+  if (e.target.id === 'password' || e.target.id === 'passwordConfirm') {
+    const pw = document.getElementById('password').value;
+    const pwC = document.getElementById('passwordConfirm').value;
+    const rules = [
+      { id: 'pwLen', test: pw.length >= 8 },
+      { id: 'pwUpper', test: /[A-Z]/.test(pw) },
+      { id: 'pwLower', test: /[a-z]/.test(pw) },
+      { id: 'pwDigit', test: /\d/.test(pw) },
+      { id: 'pwSpecial', test: /[^A-Za-z0-9]/.test(pw) },
+      { id: 'pwMatch', test: pw.length > 0 && pw === pwC }
+    ];
+    rules.forEach(r => {
+      const el = document.getElementById(r.id);
+      if (!el) return;
+      const text = el.textContent.replace(/[☐☑■□]/g, '').trim();
+      if (r.test) { el.classList.add('met'); el.innerHTML = '&#9632; ' + text; }
+      else { el.classList.remove('met'); el.innerHTML = '&#9633; ' + text; }
+    });
+  }
+});
+
+// ======= REVIEW =======
+function maskSSN(val) {
+  const clean = val.replace(/\D/g, '');
+  if (clean.length >= 4) return '***-**-' + clean.slice(-4);
+  return val;
+}
+
+function maskAcct(val) {
+  if (val.length >= 4) return '******' + val.slice(-4);
+  return val;
+}
+
+function buildReview() {
+  saveCurrentStep();
+  const s = state;
+
+  const sections = [
+    {
+      title: 'Account Type',
+      edit: true,
+      items: [['Type', s.accountType + ' Account']]
+    },
+    {
+      title: 'Personal Information',
+      edit: true,
+      items: [
+        ['Name', s.firstName + ' ' + (s.middleName || '') + ' ' + s.lastName],
+        ['Date of Birth', s.dob],
+        ['SSN / Tax ID', maskSSN(s.ssn)],
+        ['Phone', s.phone],
+        ['Email', s.email],
+        ['Driver\'s License / ID', s.driversLicense],
+        ['Issuing State', s.dlState]
+      ]
+    },
+    {
+      title: 'Address',
+      edit: true,
+      items: [
+        ['Street', s.street + (s.apt ? ', ' + s.apt : '')],
+        ['City, State, ZIP', s.city + ', ' + s.stateAddr + ' ' + s.zip],
+        ['Country', s.country]
+      ]
+    },
+    {
+      title: 'Bank Information',
+      edit: true,
+      items: [
+        ['Account Type', s.acctType],
+        ['Routing Number', s.routing.replace(/\d(?=\d{4})/g, '*')],
+        ['Account Number', maskAcct(s.accountNum)],
+        ['Bank Name', s.bankName || '—']
+      ]
+    },
+    {
+      title: 'Security Setup',
+      edit: true,
+      items: [
+        ['Password', '••••••••••'],
+        ['Reminder Phrase', s.passwordReminder],
+        ['Security Image', s.secImage + ' ' + s.imageCaption],
+        ['Question 1', s.secQ1],
+        ['Question 2', s.secQ2],
+        ['Question 3', s.secQ3]
+      ]
+    }
+  ];
+
+  let html = '';
+  sections.forEach((sec, idx) => {
+    html += '<div class="review-section">';
+    html += '<h3>' + sec.title + ' <button class="btn-link" onclick="editSection(' + (idx + 3) + ')">Edit</button></h3>';
+    html += '<div class="review-grid">';
+    sec.items.forEach(item => {
+      html += '<div class="review-item"><div class="r-label">' + item[0] + '</div><div class="r-value">' + item[1] + '</div></div>';
+    });
+    html += '</div></div>';
+  });
+
+  document.getElementById('reviewContent').innerHTML = html;
+  toggleSubmit();
+}
+
+function editSection(step) {
+  goToStep(step);
+}
+
+function toggleSubmit() {
+  const checked = document.getElementById('confirmCheck').checked;
+  document.getElementById('submitBtn').disabled = !checked;
+}
+
+// ======= SUBMIT =======
+function submitApplication() {
+  goToStep(8);
+}
+
+// ======= CANCEL / NAV =======
+function cancelFlow() {
+  if (confirm('Are you sure you want to cancel? Your progress will be lost.')) {
+    window.location.href = '/';
+  }
+}
+
+function goToDashboard() {
+  window.location.href = '/log-in/';
+}
+
+function printSummary() {
+  window.print();
+}
+
+function returnHome() {
+  window.location.href = '/';
+}
+
+function onFieldChange() {}
+
+// ======= SSN auto-format =======
+document.addEventListener('input', function(e) {
+  if (e.target.id === 'ssn' || e.target.id === 'ssnConfirm') {
+    let val = e.target.value.replace(/\D/g, '');
+    if (val.length > 3 && val.length <= 5) val = val.slice(0,3) + '-' + val.slice(3);
+    else if (val.length > 5) val = val.slice(0,3) + '-' + val.slice(3,5) + '-' + val.slice(5,9);
+    e.target.value = val;
+  }
+  if (e.target.id === 'routing' || e.target.id === 'routingConfirm') {
+    e.target.value = e.target.value.replace(/\D/g, '').slice(0, 9);
+  }
+  if (e.target.id === 'phone') {
+    let val = e.target.value.replace(/\D/g, '').slice(0, 10);
+    if (val.length > 6) val = '(' + val.slice(0,3) + ') ' + val.slice(3,6) + '-' + val.slice(6);
+    else if (val.length > 3) val = '(' + val.slice(0,3) + ') ' + val.slice(3);
+    else if (val.length > 0) val = '(' + val;
+    e.target.value = val;
+  }
+  if (e.target.id === 'zip') {
+    e.target.value = e.target.value.replace(/\D/g, '').slice(0, 10);
+  }
+});
+
+// ======= INIT =======
+goToStep(1);
+</script>
+</body>
+</html>
