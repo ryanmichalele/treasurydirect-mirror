@@ -3,438 +3,843 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Dashboard — Account Overview</title>
+  <title>TreasuryDirect | Account Dashboard</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-      background: #f0f2f5;
+      background: #f4f6f9;
       color: #1a1a2e;
       line-height: 1.5;
       min-height: 100vh;
     }
 
-    /* Top nav */
-    .top-nav {
-      background: #0f2b4f;
-      color: #fff;
-      padding: 0 1.5rem;
+    /* ── GOV BANNER ── */
+    .gov-banner {
+      background: #fff;
+      border-bottom: 1px solid #dde2e8;
+      padding: 0.3rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      color: #3a3a3a;
+    }
+    .gov-banner img { width: 18px; }
+    .gov-banner .how-know {
+      color: #005ea2;
+      text-decoration: underline;
+      cursor: pointer;
+      margin-left: 0.3rem;
+    }
+
+    /* ── HTTPS BANNER ── */
+    .https-banner {
+      background: #fff;
+      border-bottom: 1px solid #dde2e8;
+      text-align: center;
+      font-size: 0.75rem;
+      color: #3a3a3a;
+      padding: 0.25rem 1rem;
+    }
+    .https-banner .lock { color: #1a7b3a; margin-right: 0.3rem; }
+
+    /* ── MAIN NAV ── */
+    .main-nav {
+      background: #fff;
+      border-bottom: 1px solid #dde2e8;
+      padding: 0 2rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      height: 56px;
+      height: 64px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
     }
-    .top-nav .brand {
-      font-weight: 700;
-      font-size: 1rem;
-      letter-spacing: -0.02em;
+    .main-nav .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.1rem;
+      font-size: 1.45rem;
+      font-weight: 800;
+      text-decoration: none;
+      letter-spacing: -0.03em;
     }
-    .top-nav .nav-right {
+    .main-nav .logo .treasury { color: #1a3a6b; }
+    .main-nav .logo .direct { color: #00a859; }
+    .main-nav .logo .dot { color: #00a859; }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      list-style: none;
+      flex: 1;
+      padding: 0 2rem;
+    }
+    .nav-links li a {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      text-decoration: none;
+      color: #1a2a4a;
+      font-size: 0.88rem;
+      font-weight: 500;
+      padding: 0.4rem 0.75rem;
+      border-radius: 4px;
+      transition: background 0.15s;
+      white-space: nowrap;
+    }
+    .nav-links li a:hover { background: #f0f4fa; }
+    .nav-links li a .caret {
+      font-size: 0.6rem;
+      opacity: 0.6;
+      margin-left: 0.1rem;
+    }
+    .nav-right {
       display: flex;
       align-items: center;
       gap: 0.75rem;
     }
-    .top-nav .user-badge {
+    .user-menu {
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      font-size: 0.85rem;
-      font-weight: 500;
+      cursor: pointer;
+      padding: 0.3rem 0.6rem;
+      border-radius: 6px;
+      transition: background 0.15s;
     }
-    .top-nav .user-avatar {
-      width: 32px;
-      height: 32px;
+    .user-menu:hover { background: #f0f4fa; }
+    .user-avatar {
+      width: 34px;
+      height: 34px;
       border-radius: 50%;
-      background: rgba(255,255,255,0.15);
+      background: #1a3a6b;
       display: flex;
       align-items: center;
       justify-content: center;
+      color: #fff;
       font-size: 0.85rem;
       font-weight: 700;
+      flex-shrink: 0;
     }
-    .top-nav .btn-logout {
-      background: rgba(255,255,255,0.1);
-      border: 1px solid rgba(255,255,255,0.2);
+    .user-menu .user-name {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: #1a2a4a;
+    }
+    .user-menu .caret { font-size: 0.6rem; color: #6b7a8a; }
+    .btn-logout {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: #1a3a6b;
       color: #fff;
-      padding: 0.4rem 0.85rem;
+      border: none;
       border-radius: 6px;
-      font-size: 0.78rem;
+      padding: 0.5rem 1.1rem;
+      font-size: 0.85rem;
       font-weight: 600;
       cursor: pointer;
-      font-family: inherit;
+      text-decoration: none;
       transition: background 0.15s;
     }
-    .top-nav .btn-logout:hover { background: rgba(255,255,255,0.2); }
+    .btn-logout:hover { background: #0f2b55; }
+    .btn-logout .lock-icon { font-size: 0.8rem; }
 
-    /* Main layout */
-    .dash-container {
-      max-width: 1100px;
+    /* ── PAGE BODY ── */
+    .page-body {
+      max-width: 1200px;
       margin: 0 auto;
-      padding: 1.5rem;
+      padding: 1.5rem 1.5rem 3rem;
     }
 
-    /* Welcome */
-    .welcome-section {
-      margin-bottom: 1.5rem;
+    /* ── DASHBOARD HEADER ── */
+    .dash-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 1.25rem;
     }
-    .welcome-section h1 {
-      font-size: 1.35rem;
-      font-weight: 700;
-      color: #0f2b4f;
+    .dash-header .user-icon-big {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: #1a3a6b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 1.4rem;
+      flex-shrink: 0;
+      margin-top: 0.2rem;
     }
-    .welcome-section p {
-      font-size: 0.88rem;
+    .dash-header .dash-title { font-size: 1.6rem; font-weight: 700; color: #1a1a2e; }
+    .dash-header .welcome { font-size: 0.9rem; color: #3a4a5a; margin-top: 0.15rem; }
+    .dash-header .meta {
+      font-size: 0.78rem;
       color: #5a6a7a;
+      margin-top: 0.15rem;
     }
+    .dash-header .meta strong { color: #1a2a3a; }
 
-    /* Cards grid */
-    .cards-grid {
+    /* ── SUMMARY CARDS ── */
+    .summary-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      grid-template-columns: repeat(4, 1fr);
       gap: 1rem;
       margin-bottom: 1.5rem;
     }
-    .stat-card {
+    .summary-card {
       background: #fff;
-      border-radius: 12px;
-      border: 1px solid #e0e5ea;
-      padding: 1.25rem;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
-    }
-    .stat-card .stat-icon {
-      width: 40px;
-      height: 40px;
+      border: 1px solid #e0e6ed;
       border-radius: 10px;
+      padding: 1rem 1.1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+    .summary-card .card-top {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+    }
+    .summary-card .card-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 1.2rem;
-      margin-bottom: 0.75rem;
+      flex-shrink: 0;
     }
-    .stat-card .stat-label {
-      font-size: 0.78rem;
+    .icon-green { background: #e8f5e8; color: #1a7b3a; }
+    .icon-orange { background: #fff3e0; color: #e65100; }
+    .icon-blue { background: #e3f0fb; color: #1a3a6b; }
+    .icon-purple { background: #f3e8ff; color: #6a1a9a; }
+    .summary-card .card-label {
+      font-size: 0.82rem;
       font-weight: 600;
-      color: #6b7a8a;
-      text-transform: uppercase;
-      letter-spacing: 0.03em;
+      color: #3a4a5a;
     }
-    .stat-card .stat-value {
-      font-size: 1.5rem;
+    .summary-card .card-value {
+      font-size: 1.4rem;
       font-weight: 700;
-      color: #0f2b4f;
+      color: #1a7b3a;
       margin-top: 0.1rem;
     }
-    .stat-card .stat-change {
+    .summary-card .card-value.orange { color: #e65100; }
+    .summary-card .card-sub {
       font-size: 0.78rem;
-      margin-top: 0.2rem;
+      color: #5a6a7a;
     }
-    .stat-card .stat-change.up { color: #1a7b3a; }
-    .stat-card .stat-change.down { color: #c0392b; }
+    .summary-card .card-link {
+      font-size: 0.78rem;
+      color: #1a3a6b;
+      text-decoration: underline;
+      cursor: pointer;
+      margin-top: 0.3rem;
+      display: inline-block;
+    }
+    .summary-card .card-link:hover { color: #0f2b55; }
+    .summary-card .bank-name {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: #1a2a3a;
+      margin-top: 0.1rem;
+    }
+    .summary-card .bank-num {
+      font-size: 0.78rem;
+      color: #5a6a7a;
+    }
 
-    /* Two-column layout */
-    .dash-row {
+    /* ── MIDDLE SECTION ── */
+    .middle-section {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr 320px;
       gap: 1rem;
       margin-bottom: 1.5rem;
     }
 
-    /* Panel */
-    .panel {
-      background: #fff;
-      border-radius: 12px;
-      border: 1px solid #e0e5ea;
-      padding: 1.25rem;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
-    }
-    .panel h3 {
-      font-size: 0.9rem;
+    /* Additional Accounts */
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 1rem;
       font-weight: 700;
-      color: #0f2b4f;
+      color: #1a2a3a;
+      margin-bottom: 0.85rem;
+    }
+    .section-title .sec-icon { font-size: 1.1rem; color: #1a3a6b; }
+    .accounts-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+    }
+    .acct-card {
+      background: #fff;
+      border: 1px solid #e0e6ed;
+      border-radius: 10px;
+      padding: 0.9rem 1rem;
+    }
+    .acct-card .acct-top {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      margin-bottom: 0.5rem;
+    }
+    .acct-card .acct-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+    .acct-icon-blue { background: #e3f0fb; color: #1a3a6b; }
+    .acct-icon-gold { background: #fff8e1; color: #b8860b; }
+    .acct-icon-green { background: #e8f5e8; color: #1a7b3a; }
+    .acct-icon-purple { background: #f3e8ff; color: #6a1a9a; }
+    .acct-card .acct-name {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: #1a2a3a;
+    }
+    .acct-card .acct-num {
+      font-size: 0.75rem;
+      color: #6b7a8a;
+    }
+    .acct-card .acct-value {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #1a2a3a;
+      margin-bottom: 0.15rem;
+    }
+    .acct-card .acct-sub {
+      font-size: 0.73rem;
+      color: #6b7a8a;
+      margin-bottom: 0.6rem;
+    }
+    .acct-card .acct-btns {
+      display: flex;
+      gap: 0.5rem;
+    }
+    .btn-fund {
+      padding: 0.35rem 0.85rem;
+      border: 1px solid #1a3a6b;
+      border-radius: 5px;
+      background: #fff;
+      color: #1a3a6b;
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .btn-fund:hover { background: #eef3fa; }
+    .btn-details {
+      padding: 0.35rem 0.85rem;
+      border: 1px solid #d0d7de;
+      border-radius: 5px;
+      background: #fff;
+      color: #3a4a5a;
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .btn-details:hover { background: #f5f7f9; }
+
+    /* Quick Actions */
+    .quick-actions {
+      background: #fff;
+      border: 1px solid #e0e6ed;
+      border-radius: 10px;
+      padding: 1rem;
+      height: fit-content;
+    }
+    .qa-title {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #1a2a3a;
       margin-bottom: 0.75rem;
+    }
+    .qa-title .lightning { color: #1a3a6b; font-size: 1.1rem; }
+    .qa-list { list-style: none; }
+    .qa-list li {
+      border-bottom: 1px solid #f0f2f5;
+    }
+    .qa-list li:last-child { border-bottom: none; }
+    .qa-list li a {
       display: flex;
       align-items: center;
       justify-content: space-between;
+      padding: 0.65rem 0.25rem;
+      text-decoration: none;
+      color: #1a3a6b;
+      font-size: 0.88rem;
+      font-weight: 500;
+      transition: background 0.1s;
+      border-radius: 5px;
     }
-    .panel h3 .badge {
-      font-size: 0.65rem;
-      font-weight: 600;
-      background: #eef1f5;
-      color: #5a6a7a;
-      padding: 0.15rem 0.5rem;
-      border-radius: 100px;
-    }
-
-    /* Activity list */
-    .activity-list { list-style: none; }
-    .activity-item {
+    .qa-list li a:hover { background: #f0f4fa; padding-left: 0.5rem; }
+    .qa-list li a .qa-left {
       display: flex;
-      align-items: flex-start;
-      gap: 0.65rem;
-      padding: 0.65rem 0;
-      border-bottom: 1px solid #f0f2f5;
-      font-size: 0.83rem;
+      align-items: center;
+      gap: 0.6rem;
     }
-    .activity-item:last-child { border-bottom: none; }
-    .activity-item .a-icon {
+    .qa-list li a .qa-icon {
       width: 28px;
       height: 28px;
       border-radius: 50%;
+      background: #e3f0fb;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.7rem;
+      font-size: 0.75rem;
+      color: #1a3a6b;
       flex-shrink: 0;
-      margin-top: 0.1rem;
     }
-    .activity-item .a-icon.buy { background: #e8f5e8; color: #1a7b3a; }
-    .activity-item .a-icon.sell { background: #fdf0ef; color: #c0392b; }
-    .activity-item .a-icon.auth { background: #eef4fa; color: #0f2b4f; }
-    .activity-item .a-info { flex: 1; }
-    .activity-item .a-title { font-weight: 500; color: #1a2a3a; }
-    .activity-item .a-meta { font-size: 0.72rem; color: #8a9aa8; margin-top: 0.1rem; }
+    .qa-list li a .chevron { color: #6b7a8a; font-size: 0.75rem; }
 
-    /* Saved items grid */
-    .saved-grid {
+    /* ── BOTTOM CARDS ── */
+    .bottom-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.5rem;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 1rem;
     }
-    .saved-item {
-      border: 1px solid #e0e5ea;
-      border-radius: 8px;
-      padding: 0.65rem;
-      font-size: 0.82rem;
+    .bottom-card {
+      background: #fff;
+      border: 1px solid #e0e6ed;
+      border-radius: 10px;
+      padding: 1rem 1.1rem;
+      min-height: 140px;
     }
-    .saved-item .s-title { font-weight: 600; color: #0f2b4f; }
-    .saved-item .s-meta { font-size: 0.72rem; color: #8a9aa8; }
-
-    /* Settings / Profile */
-    .profile-card {
+    .bottom-card .bc-title {
       display: flex;
       align-items: center;
-      gap: 0.75rem;
-      padding: 0.75rem 0;
+      gap: 0.5rem;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #1a2a3a;
+      margin-bottom: 1rem;
     }
-    .profile-card .p-avatar {
+    .bottom-card .bc-icon {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+    }
+    .bc-icon-blue { background: #e3f0fb; color: #1a3a6b; }
+    .bc-icon-teal { background: #e0f7f7; color: #006b6b; }
+    .bc-icon-orange { background: #fff3e0; color: #c0620a; }
+    .bottom-card .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 0;
+    }
+    .empty-state .empty-icon {
       width: 48px;
       height: 48px;
       border-radius: 50%;
-      background: #0f2b4f;
-      color: #fff;
+      background: #f0f2f5;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.1rem;
-      font-weight: 700;
-      flex-shrink: 0;
+      font-size: 1.3rem;
+      color: #b0bbc6;
     }
-    .profile-card .p-info { flex: 1; }
-    .profile-card .p-name { font-weight: 600; color: #1a2a3a; }
-    .profile-card .p-email { font-size: 0.8rem; color: #6b7a8a; }
-    .profile-card .btn-settings {
-      background: transparent;
-      border: 1px solid #d0d7de;
-      border-radius: 6px;
-      padding: 0.4rem 0.75rem;
-      font-size: 0.78rem;
-      font-weight: 500;
-      color: #4a5a6a;
-      cursor: pointer;
-      font-family: inherit;
+    .empty-state p {
+      font-size: 0.82rem;
+      color: #8a9aa8;
     }
-    .profile-card .btn-settings:hover { background: #f5f7f9; }
 
-    /* Logged-out redirect */
-    .logged-out-msg {
+    /* ── FOOTER ── */
+    .footer {
+      background: #1a3a6b;
+      color: #fff;
+      padding: 1.5rem 2rem;
+      margin-top: 2rem;
+    }
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
       text-align: center;
-      padding: 4rem 1rem;
     }
-    .logged-out-msg h2 { color: #0f2b4f; margin-bottom: 0.5rem; }
-    .logged-out-msg a { color: #0f2b4f; font-weight: 600; }
+    .footer-links {
+      display: flex;
+      gap: 0;
+      list-style: none;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .footer-links li a {
+      color: rgba(255,255,255,0.85);
+      text-decoration: none;
+      font-size: 0.82rem;
+      padding: 0.15rem 0.75rem;
+      border-right: 1px solid rgba(255,255,255,0.3);
+    }
+    .footer-links li:last-child a { border-right: none; }
+    .footer-links li a:hover { color: #fff; text-decoration: underline; }
+    .footer-sub {
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.7);
+    }
+    .footer-logo {
+      width: 44px;
+      height: 44px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      margin-bottom: 0.25rem;
+    }
 
-    @media (max-width: 700px) {
-      .dash-row { grid-template-columns: 1fr; }
-      .cards-grid { grid-template-columns: 1fr 1fr; }
-      .top-nav { padding: 0 1rem; }
-      .dash-container { padding: 1rem; }
-      .saved-grid { grid-template-columns: 1fr; }
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .summary-grid { grid-template-columns: 1fr 1fr; }
+      .middle-section { grid-template-columns: 1fr; }
+      .bottom-grid { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
     }
-    @media (max-width: 480px) {
-      .cards-grid { grid-template-columns: 1fr; }
+    @media (max-width: 600px) {
+      .summary-grid { grid-template-columns: 1fr; }
+      .accounts-grid { grid-template-columns: 1fr; }
+      .main-nav { padding: 0 1rem; }
+      .page-body { padding: 1rem; }
     }
   </style>
 </head>
 <body>
 
-<!-- Top Nav -->
-<nav class="top-nav">
-  <div class="brand">Demo Financial Dashboard</div>
+<!-- GOV BANNER -->
+<div class="gov-banner">
+  <img src="/images/icons/us_flag_small.png" alt="U.S. flag">
+  <span>An official website of the United States government</span>
+  <span class="how-know">Here's how you know ▾</span>
+</div>
+
+<!-- HTTPS BANNER -->
+<div class="https-banner">
+  <span class="lock">🔒</span> This official U.S. government site is secure (HTTPS).
+</div>
+
+<!-- MAIN NAV -->
+<nav class="main-nav">
+  <a class="logo" href="/">
+    <span class="treasury">Treasury</span><span class="direct">Direct</span><span class="dot">.</span>
+  </a>
+
+  <ul class="nav-links">
+    <li><a href="#">My Accounts <span class="caret">▾</span></a></li>
+    <li><a href="/savings-bonds/">Savings Bonds <span class="caret">▾</span></a></li>
+    <li><a href="/marketable-securities/">Treasury Securities <span class="caret">▾</span></a></li>
+    <li><a href="#">Learn <span class="caret">▾</span></a></li>
+    <li><a href="/research-center/">Research <span class="caret">▾</span></a></li>
+    <li><a href="/about/">About <span class="caret">▾</span></a></li>
+  </ul>
+
   <div class="nav-right">
-    <div class="user-badge">
-      <div class="user-avatar" id="navAvatar">U</div>
-      <span id="navUsername">user</span>
+    <div class="user-menu">
+      <div class="user-avatar">K</div>
+      <span class="user-name" id="navUserName">Kenneth</span>
+      <span class="caret">▾</span>
     </div>
-    <button class="btn-logout" onclick="handleLogout()">Log Out</button>
+    <a class="btn-logout" href="/log-in/">
+      <span class="lock-icon">🔒</span> Log Out
+    </a>
   </div>
 </nav>
 
-<!-- Main Container -->
-<div class="dash-container" id="dashContent">
+<!-- PAGE BODY -->
+<div class="page-body">
 
-  <div class="welcome-section">
-    <h1>Welcome back, <span id="welcomeName">User</span>.</h1>
-    <p>Here is your account overview for <span id="todayDate">today</span>.</p>
-  </div>
-
-  <!-- Stats -->
-  <div class="cards-grid">
-    <div class="stat-card">
-      <div class="stat-icon" style="background:#eef4fa;">&#128176;</div>
-      <div class="stat-label">Portfolio Value</div>
-      <div class="stat-value">$12,450.00</div>
-      <div class="stat-change up">&#9650; +$320.00 this month</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-icon" style="background:#e8f5e8;">&#128200;</div>
-      <div class="stat-label">Active Bonds</div>
-      <div class="stat-value">8</div>
-      <div class="stat-change up">&#9650; +2 this year</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-icon" style="background:#fdf8ee;">&#128179;</div>
-      <div class="stat-label">Pending Transactions</div>
-      <div class="stat-value">3</div>
-      <div class="stat-change">Processing</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-icon" style="background:#f0eef8;">&#128274;</div>
-      <div class="stat-label">Account Status</div>
-      <div class="stat-value" style="color:#1a7b3a;">Active</div>
-      <div class="stat-change up">&#10003; Verified</div>
+  <!-- DASHBOARD HEADER -->
+  <div class="dash-header">
+    <div class="user-icon-big">👤</div>
+    <div>
+      <div class="dash-title">Account Dashboard</div>
+      <div class="welcome">Welcome back, <strong id="welcomeName">Kenneth</strong>.</div>
+      <div class="meta">
+        <strong>Account Number:</strong> *******5728 &nbsp;&nbsp;
+        <strong>Last Login:</strong> <span id="lastLogin">May 16, 2025, 10:32 a.m. ET</span>
+      </div>
     </div>
   </div>
 
-  <div class="dash-row">
-    <!-- Recent Activity -->
-    <div class="panel">
-      <h3>Recent Activity <span class="badge">Last 7 days</span></h3>
-      <ul class="activity-list">
-        <li class="activity-item">
-          <div class="a-icon buy">&#8593;</div>
-          <div class="a-info">
-            <div class="a-title">Series I Bond purchased — $500.00</div>
-            <div class="a-meta">Today at 9:42 AM &middot; Confirmed</div>
+  <!-- SUMMARY CARDS -->
+  <div class="summary-grid">
+
+    <div class="summary-card">
+      <div class="card-top">
+        <div class="card-icon icon-green">📊</div>
+        <div>
+          <div class="card-label">Current Holdings <span style="color:#aaa;font-weight:400;">ℹ</span></div>
+          <div class="card-value">$0.00</div>
+          <div class="card-sub">Total Market Value</div>
+        </div>
+      </div>
+      <a class="card-link" href="#">View My Securities</a>
+    </div>
+
+    <div class="summary-card">
+      <div class="card-top">
+        <div class="card-icon icon-orange">🕐</div>
+        <div>
+          <div class="card-label">Pending Transactions <span style="color:#aaa;font-weight:400;">ℹ</span></div>
+          <div class="card-value orange">$0.00</div>
+          <div class="card-sub">0 Transactions</div>
+        </div>
+      </div>
+      <a class="card-link" href="#">View Pending Activity</a>
+    </div>
+
+    <div class="summary-card">
+      <div class="card-top">
+        <div class="card-icon icon-blue">🏦</div>
+        <div>
+          <div class="card-label">Linked Bank Account <span style="color:#aaa;font-weight:400;">ℹ</span></div>
+          <div class="bank-name">CHASE BANK</div>
+          <div class="bank-num">*****4319</div>
+        </div>
+      </div>
+      <a class="card-link" href="#">Manage Bank Information</a>
+    </div>
+
+    <div class="summary-card">
+      <div class="card-top">
+        <div class="card-icon icon-purple">📅</div>
+        <div>
+          <div class="card-label">Upcoming Maturities <span style="color:#aaa;font-weight:400;">ℹ</span></div>
+          <div class="card-value">$0.00</div>
+          <div class="card-sub">Maturing in next 12 months</div>
+        </div>
+      </div>
+      <a class="card-link" href="#">View Maturities</a>
+    </div>
+
+  </div>
+
+  <!-- MIDDLE: ADDITIONAL ACCOUNTS + QUICK ACTIONS -->
+  <div class="middle-section">
+
+    <div>
+      <div class="section-title">
+        <span class="sec-icon">👥</span> Additional Accounts
+      </div>
+      <div class="accounts-grid">
+
+        <div class="acct-card">
+          <div class="acct-top">
+            <div class="acct-icon acct-icon-blue">👥</div>
+            <div>
+              <div class="acct-name">Advisory Account</div>
+              <div class="acct-num">*******8921</div>
+            </div>
           </div>
+          <div class="acct-value">$0.00</div>
+          <div class="acct-sub">Total Value</div>
+          <div class="acct-btns">
+            <button class="btn-fund">Fund Account</button>
+            <button class="btn-details">View Details</button>
+          </div>
+        </div>
+
+        <div class="acct-card">
+          <div class="acct-top">
+            <div class="acct-icon acct-icon-gold">🏅</div>
+            <div>
+              <div class="acct-name">Sovereign Gold Bond Account</div>
+              <div class="acct-num">*******3145</div>
+            </div>
+          </div>
+          <div class="acct-value">$0.00</div>
+          <div class="acct-sub">Total Value</div>
+          <div class="acct-btns">
+            <button class="btn-fund">Fund Account</button>
+            <button class="btn-details">View Details</button>
+          </div>
+        </div>
+
+        <div class="acct-card">
+          <div class="acct-top">
+            <div class="acct-icon acct-icon-green">💵</div>
+            <div>
+              <div class="acct-name">Cash Deposit Account</div>
+              <div class="acct-num">*******6657</div>
+            </div>
+          </div>
+          <div class="acct-value">$0.00</div>
+          <div class="acct-sub">Available Balance</div>
+          <div class="acct-btns">
+            <button class="btn-fund">Fund Account</button>
+            <button class="btn-details">View Details</button>
+          </div>
+        </div>
+
+        <div class="acct-card">
+          <div class="acct-top">
+            <div class="acct-icon acct-icon-purple">🌐</div>
+            <div>
+              <div class="acct-name">International US Depot</div>
+              <div class="acct-num">*******7783</div>
+            </div>
+          </div>
+          <div class="acct-value">$0.00</div>
+          <div class="acct-sub">Total Value (USD)</div>
+          <div class="acct-btns">
+            <button class="btn-fund">Fund Account</button>
+            <button class="btn-details">View Details</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- QUICK ACTIONS -->
+    <div class="quick-actions">
+      <div class="qa-title">
+        <span class="lightning">⚡</span> Quick Actions
+      </div>
+      <ul class="qa-list">
+        <li>
+          <a href="/savings-bonds/buy-a-bond/">
+            <span class="qa-left">
+              <span class="qa-icon">🏛</span> Buy Savings Bonds
+            </span>
+            <span class="chevron">›</span>
+          </a>
         </li>
-        <li class="activity-item">
-          <div class="a-icon sell">&#8595;</div>
-          <div class="a-info">
-            <div class="a-title">EE Bond redeemed — $1,200.00</div>
-            <div class="a-meta">Yesterday &middot; Completed</div>
-          </div>
+        <li>
+          <a href="/1099/">
+            <span class="qa-left">
+              <span class="qa-icon">📄</span> View Tax Forms
+            </span>
+            <span class="chevron">›</span>
+          </a>
         </li>
-        <li class="activity-item">
-          <div class="a-icon auth">&#9881;</div>
-          <div class="a-info">
-            <div class="a-title">Account settings updated</div>
-            <div class="a-meta">3 days ago &middot; Email notification changed</div>
-          </div>
+        <li>
+          <a href="#">
+            <span class="qa-left">
+              <span class="qa-icon">🏦</span> Manage Bank Information
+            </span>
+            <span class="chevron">›</span>
+          </a>
         </li>
-        <li class="activity-item">
-          <div class="a-icon buy">&#8593;</div>
-          <div class="a-info">
-            <div class="a-title">Recurring purchase scheduled</div>
-            <div class="a-meta">5 days ago &middot; $100 monthly into Series EE</div>
-          </div>
+        <li>
+          <a href="#">
+            <span class="qa-left">
+              <span class="qa-icon">👤</span> Update Account
+            </span>
+            <span class="chevron">›</span>
+          </a>
         </li>
-        <li class="activity-item">
-          <div class="a-icon buy">&#8593;</div>
-          <div class="a-info">
-            <div class="a-title">Gift bond delivered — $50.00</div>
-            <div class="a-meta">6 days ago &middot; To beneficiary</div>
-          </div>
+        <li>
+          <a href="#">
+            <span class="qa-left">
+              <span class="qa-icon">💲</span> Redeem Securities
+            </span>
+            <span class="chevron">›</span>
+          </a>
         </li>
       </ul>
     </div>
 
-    <!-- Saved Items + Profile -->
-    <div>
-      <div class="panel" style="margin-bottom:1rem;">
-        <h3>Saved Items <span class="badge">4 items</span></h3>
-        <div class="saved-grid">
-          <div class="saved-item">
-            <div class="s-title">Series I Bond</div>
-            <div class="s-meta">4.26% &middot; Saved draft</div>
-          </div>
-          <div class="saved-item">
-            <div class="s-title">Treasury Bill</div>
-            <div class="s-meta">52-week &middot; Saved search</div>
-          </div>
-          <div class="saved-item">
-            <div class="s-title">Gift Calculator</div>
-            <div class="s-meta">$500 &middot; Recent calc</div>
-          </div>
-          <div class="saved-item">
-            <div class="s-title">Auction Alert</div>
-            <div class="s-meta">10-Year Note &middot; Set</div>
-          </div>
-        </div>
-      </div>
+  </div>
 
-      <div class="panel">
-        <h3>Profile</h3>
-        <div class="profile-card">
-          <div class="p-avatar" id="profileAvatar">U</div>
-          <div class="p-info">
-            <div class="p-name" id="profileName">User Name</div>
-            <div class="p-email" id="profileEmail">user@example.com</div>
-          </div>
-          <button class="btn-settings" onclick="alert('Profile settings — demo mode.')">Settings</button>
-        </div>
+  <!-- BOTTOM CARDS -->
+  <div class="bottom-grid">
+
+    <div class="bottom-card">
+      <div class="bc-title">
+        <div class="bc-icon bc-icon-blue">🕐</div>
+        Recent Activity
+      </div>
+      <div class="empty-state">
+        <div class="empty-icon">📄</div>
+        <p>No recent activity.</p>
       </div>
     </div>
+
+    <div class="bottom-card">
+      <div class="bc-title">
+        <div class="bc-icon bc-icon-teal">✉️</div>
+        Messages &amp; Alerts
+      </div>
+      <div class="empty-state">
+        <div class="empty-icon">✉️</div>
+        <p>No messages or alerts.</p>
+      </div>
+    </div>
+
+    <div class="bottom-card">
+      <div class="bc-title">
+        <div class="bc-icon bc-icon-orange">🔔</div>
+        Account Notices
+      </div>
+      <div class="empty-state">
+        <div class="empty-icon">🔔</div>
+        <p>No notices at this time.</p>
+      </div>
+    </div>
+
   </div>
 
 </div>
 
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-logo">🏛</div>
+    <ul class="footer-links">
+      <li><a href="/about/">About Us</a></li>
+      <li><a href="/legal-information/privacy/">Privacy &amp; Legal</a></li>
+      <li><a href="/legal-information/accessibility/">Accessibility</a></li>
+      <li><a href="#">Site Map</a></li>
+    </ul>
+    <div class="footer-sub">U.S. Department of the Treasury, Bureau of the Fiscal Service</div>
+    <div class="footer-sub">Last Updated: May 16, 2025</div>
+  </div>
+</footer>
+
 <script>
-  // Check login state
-  function checkAuth() {
-    if (sessionStorage.getItem('demo_logged_in') !== 'true') {
-      document.getElementById('dashContent').innerHTML =
-        '<div class="logged-out-msg"><h2>Session expired</h2><p>Please <a href="/log-in/">log in</a> to view your dashboard.</p></div>';
-      return false;
-    }
-    return true;
+  // Pull username from sessionStorage if set during login
+  const stored = sessionStorage.getItem('td_user') || localStorage.getItem('td_user');
+  if (stored) {
+    try {
+      const u = JSON.parse(stored);
+      const name = u.firstName || u.name || 'Kenneth';
+      document.getElementById('welcomeName').textContent = name;
+      document.getElementById('navUserName').textContent = name;
+      document.querySelector('.user-avatar').textContent = name.charAt(0).toUpperCase();
+    } catch(e) {}
   }
 
-  function initDashboard() {
-    if (!checkAuth()) return;
-
-    const username = sessionStorage.getItem('demo_username') || 'User';
-    const displayName = username.charAt(0).toUpperCase() + username.slice(1);
-
-    document.getElementById('welcomeName').textContent = displayName;
-    document.getElementById('navUsername').textContent = displayName;
-    document.getElementById('navAvatar').textContent = displayName.charAt(0).toUpperCase();
-    document.getElementById('profileAvatar').textContent = displayName.charAt(0).toUpperCase();
-    document.getElementById('profileName').textContent = displayName;
-    document.getElementById('profileEmail').textContent = username + '@demo-platform.demo';
-
-    const now = new Date();
-    document.getElementById('todayDate').textContent = now.toLocaleDateString('en-US', {
-      weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
-    });
-  }
-
-  function handleLogout() {
-    sessionStorage.removeItem('demo_logged_in');
-    sessionStorage.removeItem('demo_username');
-    window.location.href = '/log-in/';
-  }
-
-  initDashboard();
+  // Last login timestamp
+  const now = new Date();
+  const opts = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true };
+  document.getElementById('lastLogin').textContent = now.toLocaleString('en-US', opts) + ' ET';
 </script>
+
 </body>
 </html>
